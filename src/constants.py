@@ -81,9 +81,6 @@ AGENTCOLORLIST = {
     "tejo": (255, 183, 97),
 }
 
-
-GAMEPODS = requests.get("https://valorant-api.com/internal/locres/en-US").json()["data"]["UI_GamePodStrings"]
-
 symbol = "■"
 PARTYICONLIST = [
             color(symbol, fore=(227, 67, 67)),
@@ -183,6 +180,7 @@ DEFAULT_CONFIG = {
             "game_chat": True,
             "peak_rank_act": True,
             "discord_rpc": True,
-            "aggregate_rank_rr": True
+            "aggregate_rank_rr": True,
+            "server_id": False
         }
     }
