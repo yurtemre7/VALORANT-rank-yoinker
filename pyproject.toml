@@ -1,0 +1,28 @@
+[project]
+name = "valorant-rank-yoinker"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "certifi==2024.7.4",
+    "charset-normalizer==3.2.0",
+    "colr==0.9.1",
+    "cx-freeze>=8.3.0",
+    "idna==3.7",
+    "inquirerpy==0.3.4",
+    "markdown-it-py==3.0.0",
+    "mdurl==0.1.2",
+    "nest-asyncio==1.5.6",
+    "pfzy==0.3.4",
+    "prompt-toolkit==3.0.39",
+    "pygments==2.15.1",
+    "pypresence==4.3.0",
+    "pyyaml==6.0.1",
+    "requests==2.32.0",
+    "rich==13.5.1",
+    "urllib3==2.2.2",
+    "wcwidth==0.2.6",
+    "websocket-server==0.6.4",
+    "websockets==11.0.3",
+]
