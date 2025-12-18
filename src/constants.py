@@ -1,7 +1,7 @@
 import requests
 from colr import color
 
-version = "2.80"
+version = "2.91"
 enablePrivateLogging = True
 hide_names = True
 hide_levels = True
@@ -54,10 +54,10 @@ sockets = {
 AGENTCOLORLIST = {
     "none": (100, 100, 100),
     "astra": (113, 42, 232),
-    "breach": (217, 122, 46),
-    "brimstone": (217, 122, 46),
-    "cypher": (245, 240, 230),
-    "chamber": (200, 200, 200),
+    "breach": (199, 107, 59),
+    "brimstone": (209, 105, 31),
+    "cypher": (230, 217, 197),
+    "chamber": (184, 154, 70),
     "deadlock": (102, 119, 176),
     "fade": (92, 92, 94),
     "jett": (154, 222, 255),
@@ -65,19 +65,19 @@ AGENTCOLORLIST = {
     "killjoy": (255, 217, 31),
     "omen": (71, 80, 143),
     "phoenix": (254, 130, 102),
-    "raze": (217, 122, 46),
+    "raze": (255, 164, 0),
     "reyna": (181, 101, 181),
-    "sage": (90, 230, 213),
+    "sage": (38, 200, 175),
     "skye": (192, 230, 158),
-    "sova": (37, 143, 204),
-    "neon": (28, 69, 161),
-    "viper": (48, 186, 135),
-    "yoru": (52, 76, 207),
+    "sova": (59, 160, 229),
+    "neon": (0, 207, 255),
+    "viper": (56, 198, 89),
+    "yoru": (40, 70, 200),
     "harbor": (0, 128, 128),
-    "gekko": (60, 179, 113),
-    "vyse": (97, 83, 183),
-    "iso": (154, 222, 255),
-    "clove": (191, 158, 227),
+    "gekko": (168, 230, 94),
+    "vyse": (101, 107, 139),
+    "iso": (87, 74, 194),
+    "clove": (242, 143, 208),
     "tejo": (255, 183, 97),
 }
 
@@ -124,6 +124,37 @@ NUMBERTORANKS = [
             color('Immortal 3', fore=(221, 68, 68)),
             color('Radiant', fore=(255, 253, 205)),
         ]
+
+SHORT_NUMBERTORANKS = [
+    color('UnR', fore=(46, 46, 46)),
+    color('UnR', fore=(46, 46, 46)),
+    color('UnR', fore=(46, 46, 46)),
+    color('Iron 1', fore=(72, 69, 62)),
+    color('Iron 2', fore=(72, 69, 62)),
+    color('Iron 3', fore=(72, 69, 62)),
+    color('Bron 1', fore=(187, 143, 90)),
+    color('Bron 2', fore=(187, 143, 90)),
+    color('Bron 3', fore=(187, 143, 90)),
+    color('Silv 1', fore=(174, 178, 178)),
+    color('Silv 2', fore=(174, 178, 178)),
+    color('Silv 3', fore=(174, 178, 178)),
+    color('Gold 1', fore=(197, 186, 63)),
+    color('Gold 2', fore=(197, 186, 63)),
+    color('Gold 3', fore=(197, 186, 63)),
+    color('Plat 1', fore=(24, 167, 185)),
+    color('Plat 2', fore=(24, 167, 185)),
+    color('Plat 3', fore=(24, 167, 185)),
+    color('Dia 1', fore=(216, 100, 199)),
+    color('Dia 2', fore=(216, 100, 199)),
+    color('Dia 3', fore=(216, 100, 199)),
+    color('Asc 1', fore=(24, 148, 82)),
+    color('Asc 2', fore=(24, 148, 82)),
+    color('Asc 3', fore=(24, 148, 82)),
+    color('Imm 1', fore=(221, 68, 68)),
+    color('Imm 2', fore=(221, 68, 68)),
+    color('Imm 3', fore=(221, 68, 68)),
+    color('Rad', fore=(255, 253, 205)),
+]
 
 tierDict = {
             "0cebb8be-46d7-c12a-d306-e9907bfc5a25": (0, 149, 135),
@@ -181,6 +212,10 @@ DEFAULT_CONFIG = {
             "peak_rank_act": True,
             "discord_rpc": True,
             "aggregate_rank_rr": True,
-            "server_id": False
+            "server_id": False,
+            "short_ranks": False,
+            "truncate_skins": True,
+            "truncate_names": True,
+            "starting_side": False
         }
     }

@@ -43,6 +43,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 os.system(f"title VALORANT rank yoinker v{version}")
 
 server = ""
+team_side = None
 
 
 def program_exit(status: int):  # so we don't need to import the entire sys module
@@ -124,7 +125,7 @@ try:
 
     current_map = coregame.get_current_map(map_urls, map_splashes)
 
-    colors = Colors(hide_names, agent_dict, AGENTCOLORLIST)
+    colors = Colors(log, hide_names, agent_dict, AGENTCOLORLIST)
 
     loadoutsClass = Loadouts(Requests, log, colors, Server, current_map)
     table = Table(cfg, log)
@@ -167,6 +168,12 @@ try:
         table.set_default_field_names()
         table.reset_runtime_col_flags()
 
+        # check if short ranks should be used
+        if cfg.get_feature_flag("short_ranks"):
+            Ranks = SHORT_NUMBERTORANKS
+        else:
+            Ranks = NUMBERTORANKS
+
         try:
 
             # loop = asyncio.get_event_loop()
@@ -178,17 +185,15 @@ try:
             if firstTime:
                 run = True
                 while run:
-                    while True:
-                        presence = presences.get_presence()
-                        # wait until your own valorant presence is initialized
-                        if presences.get_private_presence(presence) != None:
-                            break
-                        time.sleep(5)
-                    if cfg.get_feature_flag("discord_rpc"):
-                        rpc.set_rpc(presences.get_private_presence(presence))
-                    game_state = presences.get_game_state(presence)
-                    if game_state != None:
-                        run = False
+                    presence = presences.get_presence()
+                    private_presence = presences.get_private_presence(presence)
+                    # wait until your own valorant presence is initialized
+                    if private_presence is not None:
+                        if cfg.get_feature_flag("discord_rpc"):
+                            rpc.set_rpc(private_presence)
+                        game_state = presences.get_game_state(presence)
+                        if game_state is not None:
+                            run = False
                     time.sleep(2)
                 log(f"first game state: {game_state}")
             else:
@@ -208,8 +213,36 @@ try:
             # asyncio.set_event_loop(loop)
             # loop.run_until_complete()
         except TypeError:
-            raise Exception("Game has not started yet!")
-        # if cfg.cooldown == 0 or game_state != lastGameState:
+            game_state = "DISCONNECTED"
+
+        if game_state == "DISCONNECTED":
+            richConsole.print("[yellow]Disconnected from Valorant. Attempting to reconnect...[/yellow]")
+            # Loop waits for the Valorant client to respond
+            while True:
+                # Rereads the lockfile
+                Requests.lockfile = Requests.get_lockfile()
+
+                if Requests.lockfile is None:
+                    time.sleep(5)
+                    continue
+
+                presence_check = presences.get_presence()
+                
+                if presence_check is not None:
+                    break 
+                
+                time.sleep(5)
+
+            richConsole.print("[green]Reconnected successfully! Loading...[/green]")
+            
+            Requests.get_headers(refresh=True)
+
+            Wss = Ws(Requests.lockfile, Requests, cfg, colors, hide_names, Server, rpc)
+
+            firstTime = True 
+            lastGameState = ""
+            continue
+
         if True:
             log(f"getting new {game_state} scoreboard")
             lastGameState = game_state
@@ -223,11 +256,25 @@ try:
                 os.system("cls")
 
             is_leaderboard_needed = False
-
+            
+            # get new presence
+            presence = presences.get_presence()
             priv_presence = presences.get_private_presence(presence)
+            
+            # Temp fix: Riot is swapping between nested and flat API structures.
+            party_state = ""
+            if "partyPresenceData" in priv_presence: # Check for nested structure
+                party_state = priv_presence["partyPresenceData"]["partyState"]
+            elif "partyState" in priv_presence: # Check for flattened structure
+                party_state = priv_presence["partyState"]
+            else:
+                # No known structure found, log and fail
+                log("ERROR: Unknown presence API structure in 'main'.")
+                party_state = priv_presence["partyPresenceData"]["partyState"]
+            
             if (
                 priv_presence["provisioningFlow"] == "CustomGame"
-                or priv_presence["partyState"] == "CUSTOM_GAME_SETUP"
+                or party_state == "CUSTOM_GAME_SETUP"
             ):
                 gamemode = "Custom Game"
             else:
@@ -247,7 +294,6 @@ try:
                     continue
                 Players = coregame_stats["Players"]
                 # data for chat to function
-                presence = presences.get_presence()
                 partyMembers = menu.get_party_members(Requests.puuid, presence)
                 partyMembersList = [a["Subject"] for a in partyMembers]
 
@@ -359,9 +405,9 @@ try:
                                         already_played_with.append(
                                             {
                                                 "times": times,
-                                                "name": agent_dict[
-                                                    player["CharacterID"].lower()
-                                                ]
+                                                "name": agent_dict.get(
+                                                    player["CharacterID"].lower(), "Unknown"
+                                                )
                                                 + " on "
                                                 + team_string
                                                 + " team",
@@ -472,10 +518,10 @@ try:
                         # views = get_views(names[player["Subject"]])
 
                         # skin
-                        skin = loadouts[player["Subject"]]
+                        skin = loadouts.get(player["Subject"], "")
 
                         # RANK
-                        rankName = NUMBERTORANKS[playerRank["rank"]]
+                        rankName = Ranks[playerRank["rank"]]
                         if cfg.get_feature_flag("aggregate_rank_rr") and cfg.table.get(
                             "rr"
                         ):
@@ -497,10 +543,10 @@ try:
                             peakRankAct = ""
 
                         # PEAK RANK
-                        peakRank = NUMBERTORANKS[playerRank["peakrank"]] + peakRankAct
+                        peakRank = Ranks[playerRank["peakrank"]] + peakRankAct
 
                         # PREVIOUS RANK
-                        previousRank = NUMBERTORANKS[previousPlayerRank["rank"]]
+                        previousRank = Ranks[previousPlayerRank["rank"]]
 
                         # LEADERBOARD
                         leaderboard = playerRank["leaderboard"]
@@ -540,7 +586,7 @@ try:
                             "puuid": player["Subject"],
                             "name": names[player["Subject"]],
                             "partyNumber": partyNum if party_icon != "" else 0,
-                            "agent": agent_dict[player["CharacterID"].lower()],
+                            "agent": agent_dict.get(player["CharacterID"].lower(), "Unknown"),
                             "rank": playerRank["rank"],
                             "peakRank": playerRank["peakrank"],
                             "peakRankAct": peakRankAct,
@@ -573,7 +619,7 @@ try:
                             {
                                 player["Subject"]: {
                                     "name": names[player["Subject"]],
-                                    "agent": agent_dict[player["CharacterID"].lower()],
+                                    "agent": agent_dict.get(player["CharacterID"].lower(), "Unknown"),
                                     "map": current_map,
                                     "rank": playerRank["rank"],
                                     "rr": rr,
@@ -703,17 +749,17 @@ try:
                             PLcolor = colors.level_to_color(player_level)
                         if player["CharacterSelectionState"] == "locked":
                             agent_color = color(
-                                str(agent_dict.get(player["CharacterID"].lower())),
+                                agent_dict.get(player["CharacterID"].lower(), "Unknown"),
                                 fore=(255, 255, 255),
                             )
                         elif player["CharacterSelectionState"] == "selected":
                             agent_color = color(
-                                str(agent_dict.get(player["CharacterID"].lower())),
+                                agent_dict.get(player["CharacterID"].lower(), "Unknown"),
                                 fore=(128, 128, 128),
                             )
                         else:
                             agent_color = color(
-                                str(agent_dict.get(player["CharacterID"].lower())),
+                                agent_dict.get(player["CharacterID"].lower(), "Unknown"),
                                 fore=(54, 53, 51),
                             )
 
@@ -731,7 +777,7 @@ try:
                         # skin = loadouts[player["Subject"]]
 
                         # RANK
-                        rankName = NUMBERTORANKS[playerRank["rank"]]
+                        rankName = Ranks[playerRank["rank"]]
                         if cfg.get_feature_flag("aggregate_rank_rr") and cfg.table.get(
                             "rr"
                         ):
@@ -752,10 +798,10 @@ try:
                         if not cfg.get_feature_flag("peak_rank_act"):
                             peakRankAct = ""
                         # PEAK RANK
-                        peakRank = NUMBERTORANKS[playerRank["peakrank"]] + peakRankAct
+                        peakRank = Ranks[playerRank["peakrank"]] + peakRankAct
 
                         # PREVIOUS RANK
-                        previousRank = NUMBERTORANKS[previousPlayerRank["rank"]]
+                        previousRank = Ranks[previousPlayerRank["rank"]]
 
                         # LEADERBOARD
                         leaderboard = playerRank["leaderboard"]
@@ -795,7 +841,7 @@ try:
                         heartbeat_data["players"][player["Subject"]] = {
                             "name": names[player["Subject"]],
                             "partyNumber": partyNum if party_icon != "" else 0,
-                            "agent": agent_dict[player["CharacterID"].lower()],
+                            "agent": agent_dict.get(player["CharacterID"].lower(), "Unknown"),
                             "rank": playerRank["rank"],
                             "peakRank": playerRank["peakrank"],
                             "peakRankAct": peakRankAct,
@@ -808,6 +854,7 @@ try:
 
                         # bar()
             if game_state == "MENUS":
+                server = ""
                 already_played_with = []
                 Players = menu.get_party_members(Requests.puuid, presence)
                 names = namesClass.get_names_from_puuids(Players)
@@ -877,7 +924,7 @@ try:
                             name = color(names[player["Subject"]], fore=(76, 151, 237))
 
                             # RANK
-                            rankName = NUMBERTORANKS[playerRank["rank"]]
+                            rankName = Ranks[playerRank["rank"]]
                             if cfg.get_feature_flag(
                                 "aggregate_rank_rr"
                             ) and cfg.table.get("rr"):
@@ -900,11 +947,11 @@ try:
 
                             # PEAK RANK
                             peakRank = (
-                                NUMBERTORANKS[playerRank["peakrank"]] + peakRankAct
+                                Ranks[playerRank["peakrank"]] + peakRankAct
                             )
 
                             # PREVIOUS RANK
-                            previousRank = NUMBERTORANKS[previousPlayerRank["rank"]]
+                            previousRank = Ranks[previousPlayerRank["rank"]]
 
                             # LEADERBOARD
                             leaderboard = playerRank["leaderboard"]
@@ -957,20 +1004,23 @@ try:
             if (title := game_state_dict.get(game_state)) is None:
                 # program_exit(1)
                 time.sleep(9)
+            
+            title_parts = [f"VALORANT status: {title}"]
+            
+            if game_state == "PREGAME" and pregame_stats is not None and cfg.get_feature_flag("starting_side"):
+                team_side = "Attacker" if pregame_stats["AllyTeam"]["TeamID"] == "Red" else "Defender"
+                title_parts.append(f" | {colr(team_side, fore=(76, 151, 237) if team_side == 'Defender' else (238, 77, 77))}")
+            
             if cfg.get_feature_flag("server_id") and server != "":
                 parts = server.split('.')
                 if len(parts) > 2:
                     short_serverID = '.'.join(parts[2:])
                 else:
                     short_serverID = server
-
-                table.set_title(
-                    f"VALORANT status: {title} {colr('- ' + short_serverID, fore=(200, 200, 200))}"
-                )
-            else:
-                table.set_title(f"VALORANT status: {title}")
+                title_parts.append(f" {colr('- ' + short_serverID, fore=(200, 200, 200))}")
             
-            server = ""
+            table.set_title(''.join(title_parts))
+            
             if title is not None:
                 if cfg.get_feature_flag("auto_hide_leaderboard") and (
                     not is_leaderboard_needed
@@ -980,7 +1030,7 @@ try:
                 if game_state == "MENUS":
                     table.set_runtime_col_flag("Party", False)
                     table.set_runtime_col_flag("Agent", False)
-                    table.set_runtime_col_flag("Skin", False)
+                    table.set_runtime_col_flag(cfg.weapon.capitalize(), False)
 
                 if game_state == "INGAME":
                     if isRange:
