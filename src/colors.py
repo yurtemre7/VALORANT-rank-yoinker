@@ -18,7 +18,7 @@ class Colors:
         if agent is not None:
             if self.hide_names:
                 if agent != "":
-                    name = self.agent_dict[agent.lower()]
+                    name = self.agent_dict.get(agent.lower(), "Player")
                 else:
                     name = "Player"
         if team == "Red":
@@ -119,7 +119,7 @@ class Colors:
         try:
             number = int(number)
         except ValueError:
-            return color("N/a", fore=(46, 46, 46))
+            return color("N/A", fore=(46, 46, 46))
         dark_red = (64, 15, 10)
         yellow = (140, 119, 11)
         green = (18, 204, 25)
