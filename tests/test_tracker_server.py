@@ -45,6 +45,30 @@ class TrackerServerTests(unittest.TestCase):
                     tracker.docs_server.shutdown()
                     tracker.docs_server.server_close()
 
+    def test_docs_server_serves_players_page_and_logs_url(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            docs = root / "docs"
+            docs.mkdir()
+            (docs / "matchLoadouts.html").write_text("tracker-ok", encoding="utf-8")
+            (docs / "players.html").write_text("players-ok", encoding="utf-8")
+
+            logs = []
+            tracker = server_module.Server(logs.append, Error=None)
+
+            with patch.object(server_module, "PROJECT_ROOT", root):
+                tracker.start_docs_server(65535)
+                try:
+                    url = f"http://127.0.0.1:{tracker.docs_port}/players.html"
+                    with urlopen(url, timeout=2) as response:
+                        self.assertEqual(response.read().decode("utf-8"), "players-ok")
+                    self.assertTrue(
+                        any("/players.html?port=65535" in line for line in logs), logs
+                    )
+                finally:
+                    tracker.docs_server.shutdown()
+                    tracker.docs_server.server_close()
+
 
 if __name__ == "__main__":
     unittest.main()
