@@ -5,8 +5,8 @@ PROJECT_ROOT = Path(__file__).parent.parent.resolve()
 
 version = "3.0.2"
 enablePrivateLogging = True
-hide_names = True
-hide_levels = True
+hide_names = False
+hide_levels = False
 
 gamemodes = {
     "newmap": "New Map",
@@ -200,7 +200,7 @@ DEFAULT_CONFIG = {
     "table": {
         "skin": True,
         "rr": True,
-        "earned_rr": True,
+        "earned_rr": False,
         "peakrank": True,
         "previousrank": False,
         "leaderboard": True,
@@ -215,12 +215,12 @@ DEFAULT_CONFIG = {
         "auto_hide_leaderboard": True,
         "pre_cls": False,
         "game_chat": True,
-        "peak_rank_act": True,
+        "peak_rank_act": False,
         "discord_rpc": True,
         "aggregate_rank_rr": True,
-        "server_id": False,
-        "short_ranks": False,
-        "truncate_skins": True,
-        "truncate_names": True
+        "server_id": True,
+        "short_ranks": True,
+        "truncate_skins": False,
+        "truncate_names": False
     }
 }
