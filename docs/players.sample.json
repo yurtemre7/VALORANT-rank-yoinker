@@ -1,0 +1,284 @@
+{
+  "time": 1793700000,
+  "state": "INGAME",
+  "mode": "Competitive",
+  "puuid": "11111111-aaaa-4aaa-8aaa-000000000001",
+  "map": [
+    "https://media.valorant-api.com/maps/7eaecc1b-4337-bbf6-6ab9-04b8f06b3319/splash.png"
+  ],
+  "myTeam": "Blue",
+  "players": {
+    "11111111-aaaa-4aaa-8aaa-000000000001": {
+      "puuid": "11111111-aaaa-4aaa-8aaa-000000000001",
+      "name": "Emre#EUW",
+      "RiotName": "Emre#EUW",
+      "GameName": "Emre#EUW",
+      "relation": "ally",
+      "myTeam": "Blue",
+      "partyNumber": 1,
+      "agent": "Jett",
+      "rank": 21,
+      "peakRank": 23,
+      "peakRankAct": "e9a2",
+      "level": 412,
+      "rr": 57,
+      "kd": 1.24,
+      "headshotPercentage": 27,
+      "winPercentage": "61 (88)",
+      "lastActive": "2h",
+      "agentImgLink": "https://media.valorant-api.com/agents/add6443a-41bd-e414-f6ad-e58d267f4e95/displayicon.png",
+      "team": "Blue",
+      "sprays": {
+        "0": {
+          "type": "spray",
+          "displayName": "Abilities Don't Kill Spray",
+          "displayIcon": "https://media.valorant-api.com/sprays/7e2ba2e8-4597-060a-b41e-81acedca414e/displayicon.png"
+        },
+        "1": {
+          "type": "spray",
+          "displayName": "Cans On Spray",
+          "displayIcon": "https://media.valorant-api.com/sprays/fe86a4c5-4e92-324b-4c0d-a7a837d0d548/displayicon.png"
+        },
+        "2": {
+          "type": "spray",
+          "displayName": "Hot Seat Spray",
+          "displayIcon": "https://media.valorant-api.com/sprays/7e85d0ab-4cc5-d869-5485-798aae7e8656/displayicon.png"
+        }
+      },
+      "title": "Sharpshooter",
+      "playerCard": "https://media.valorant-api.com/playercards/c8b2f5fd-4331-b172-f3b7-c8a26f356a1f/largeart.png",
+      "weapons": {
+        "9c82e19d-4575-0200-1a81-3eacf00cf872": {
+          "weapon": "Vandal",
+          "skinDisplayName": "RGX 11z Pro Vandal",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/e5490f71-455b-74ad-f762-f5a876d4dff9/displayicon.png",
+          "buddy_displayIcon": "https://media.valorant-api.com/buddies/f2f07eae-4518-15eb-546b-018961e0dd60/displayicon.png"
+        },
+        "ee8e8d15-496b-07ac-e5f6-8fae5d4c7b1a": {
+          "weapon": "Phantom",
+          "skinDisplayName": "RGX 11z Pro Phantom",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/499acf05-4f79-e345-3714-57bf7aa163ea/displayicon.png"
+        },
+        "a03b24d3-4319-996d-0f8c-94bbfba1dfc7": {
+          "weapon": "Operator",
+          "skinDisplayName": "RGX 11z Pro Operator",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/2e1936ed-4582-628f-da9c-25a7f47323cc/displayicon.png"
+        },
+        "e336c6b8-418d-9340-d77f-7a9e4cfe0702": {
+          "weapon": "Sheriff",
+          "skinDisplayName": "Mythmaker Sheriff",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/c2aee89c-4f9c-47a9-8dc0-f9a53535d508/displayicon.png",
+          "buddy_displayIcon": "https://media.valorant-api.com/buddies/bf997358-4a99-c1f8-37b0-5fa64200cdce/displayicon.png"
+        },
+        "1baa85b4-4c70-1284-64bb-6481dfc3bb4e": {
+          "weapon": "Ghost",
+          "skinDisplayName": "Flutter Ghost",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/d0fbfdee-4961-cf51-24a4-4a853ee9fd0c/displayicon.png"
+        },
+        "2f59173c-4bed-b6c3-2191-dea9b58be9c7": {
+          "weapon": "Melee",
+          "skinDisplayName": "RGX 11z Pro Blade",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/9fb366b6-46df-a722-0cf2-9c9b85936f17/displayicon.png"
+        }
+      }
+    },
+    "22222222-bbbb-4bbb-8bbb-000000000002": {
+      "puuid": "22222222-bbbb-4bbb-8bbb-000000000002",
+      "name": "Kenji#0001",
+      "RiotName": "Kenji#0001",
+      "GameName": "Kenji#0001",
+      "relation": "ally",
+      "myTeam": "Blue",
+      "partyNumber": 1,
+      "agent": "Sage",
+      "rank": 18,
+      "peakRank": 20,
+      "peakRankAct": "e9a2",
+      "level": 233,
+      "rr": 12,
+      "kd": 0.98,
+      "headshotPercentage": 19,
+      "winPercentage": "52 (41)",
+      "lastActive": "2h",
+      "agentImgLink": "https://media.valorant-api.com/agents/569fdd95-4d10-43ab-ca70-79becc718b46/displayicon.png",
+      "team": "Blue",
+      "sprays": {
+        "0": {
+          "type": "spray",
+          "displayName": "Cans On Spray",
+          "displayIcon": "https://media.valorant-api.com/sprays/fe86a4c5-4e92-324b-4c0d-a7a837d0d548/displayicon.png"
+        }
+      },
+      "title": "Healer",
+      "playerCard": "https://media.valorant-api.com/playercards/eef542d2-4724-bc47-f53f-239f8c9c2623/largeart.png",
+      "weapons": {
+        "9c82e19d-4575-0200-1a81-3eacf00cf872": {
+          "weapon": "Vandal",
+          "skinDisplayName": "Immortalized Vandal",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/d980c0c8-492b-b8df-2d91-af99a7707170/displayicon.png"
+        },
+        "ee8e8d15-496b-07ac-e5f6-8fae5d4c7b1a": {
+          "weapon": "Phantom",
+          "skinDisplayName": "Task Force 809 Phantom",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/3d71065e-4f0b-19a8-26d5-129cddeb013b/displayicon.png",
+          "buddy_displayIcon": "https://media.valorant-api.com/buddies/bf997358-4a99-c1f8-37b0-5fa64200cdce/displayicon.png"
+        },
+        "a03b24d3-4319-996d-0f8c-94bbfba1dfc7": {
+          "weapon": "Operator",
+          "skinDisplayName": "Frequency Operator",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/bc6c0465-4a8c-ec92-dc9a-d68e7e4a1a78/displayicon.png"
+        },
+        "e336c6b8-418d-9340-d77f-7a9e4cfe0702": {
+          "weapon": "Sheriff",
+          "skinDisplayName": "Wayfarer Sheriff",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/34f735c0-4fcd-b4fd-fb34-fbab97b42a41/displayicon.png"
+        },
+        "1baa85b4-4c70-1284-64bb-6481dfc3bb4e": {
+          "weapon": "Ghost",
+          "skinDisplayName": "Fiber Optic Ghost",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/86564070-4e0e-fae7-1c2c-e28f044076d6/displayicon.png"
+        },
+        "2f59173c-4bed-b6c3-2191-dea9b58be9c7": {
+          "weapon": "Melee",
+          "skinDisplayName": "Task Force 809 Knife",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/58442f45-4783-42a2-f4cb-789a27555889/displayicon.png"
+        }
+      }
+    },
+    "33333333-cccc-4ccc-8ccc-000000000003": {
+      "puuid": "33333333-cccc-4ccc-8ccc-000000000003",
+      "name": "<img src=x onerror=alert(1)>",
+      "RiotName": "<img src=x onerror=alert(1)>",
+      "GameName": "<img src=x onerror=alert(1)>",
+      "relation": "ally",
+      "myTeam": "Blue",
+      "partyNumber": 0,
+      "agent": "Reyna",
+      "rank": 15,
+      "peakRank": 15,
+      "peakRankAct": "e9a2",
+      "level": 87,
+      "rr": 80,
+      "kd": 1.51,
+      "headshotPercentage": 31,
+      "winPercentage": "70 (10)",
+      "lastActive": "2h",
+      "agentImgLink": "https://media.valorant-api.com/agents/a3bfb853-43b2-7238-a4f1-ad90e9e46bcc/displayicon.png",
+      "team": "Blue",
+      "sprays": {},
+      "title": null,
+      "playerCard": "https://media.valorant-api.com/playercards/d32e58b1-4191-7315-ad4a-9da58b3f23dd/largeart.png",
+      "weapons": {
+        "9c82e19d-4575-0200-1a81-3eacf00cf872": {
+          "weapon": "Vandal",
+          "skinDisplayName": "Standard Vandal",
+          "skinDisplayIcon": "https://media.valorant-api.com/weapons/9c82e19d-4575-0200-1a81-3eacf00cf872/displayicon.png"
+        },
+        "ee8e8d15-496b-07ac-e5f6-8fae5d4c7b1a": {
+          "weapon": "Phantom",
+          "skinDisplayName": "Task Force 809 Phantom",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/3d71065e-4f0b-19a8-26d5-129cddeb013b/displayicon.png"
+        },
+        "e336c6b8-418d-9340-d77f-7a9e4cfe0702": {
+          "weapon": "Sheriff",
+          "skinDisplayName": "Standard Sheriff",
+          "skinDisplayIcon": "https://media.valorant-api.com/weapons/e336c6b8-418d-9340-d77f-7a9e4cfe0702/displayicon.png"
+        },
+        "2f59173c-4bed-b6c3-2191-dea9b58be9c7": {
+          "weapon": "Melee",
+          "skinDisplayName": "Melee",
+          "skinDisplayIcon": "https://media.valorant-api.com/weapons/2f59173c-4bed-b6c3-2191-dea9b58be9c7/displayicon.png"
+        }
+      }
+    },
+    "44444444-dddd-4ddd-8ddd-000000000004": {
+      "puuid": "44444444-dddd-4ddd-8ddd-000000000004",
+      "name": "",
+      "RiotName": "",
+      "GameName": "",
+      "relation": "enemy",
+      "myTeam": "Blue",
+      "partyNumber": 0,
+      "agent": "Omen",
+      "rank": 24,
+      "peakRank": 25,
+      "peakRankAct": "e9a2",
+      "level": 501,
+      "rr": 33,
+      "kd": 1.1,
+      "headshotPercentage": 24,
+      "winPercentage": "58 (120)",
+      "lastActive": "2h",
+      "agentImgLink": "https://media.valorant-api.com/agents/8e253930-4c05-31dd-1b6c-968525494517/displayicon.png",
+      "team": "Red",
+      "sprays": {
+        "0": {
+          "type": "spray",
+          "displayName": "Hot Seat Spray",
+          "displayIcon": "https://media.valorant-api.com/sprays/7e85d0ab-4cc5-d869-5485-798aae7e8656/displayicon.png"
+        }
+      },
+      "title": "Ghost",
+      "playerCard": "https://media.valorant-api.com/playercards/d2d3caf9-499f-2ac8-9722-54961c3bcbf5/largeart.png",
+      "weapons": {
+        "9c82e19d-4575-0200-1a81-3eacf00cf872": {
+          "weapon": "Vandal",
+          "skinDisplayName": "RGX 11z Pro Vandal",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/e5490f71-455b-74ad-f762-f5a876d4dff9/displayicon.png"
+        },
+        "ee8e8d15-496b-07ac-e5f6-8fae5d4c7b1a": {
+          "weapon": "Phantom",
+          "skinDisplayName": "RGX 11z Pro Phantom",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/499acf05-4f79-e345-3714-57bf7aa163ea/displayicon.png",
+          "buddy_displayIcon": "https://media.valorant-api.com/buddies/f2f07eae-4518-15eb-546b-018961e0dd60/displayicon.png"
+        },
+        "a03b24d3-4319-996d-0f8c-94bbfba1dfc7": {
+          "weapon": "Operator",
+          "skinDisplayName": "RGX 11z Pro Operator",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/2e1936ed-4582-628f-da9c-25a7f47323cc/displayicon.png"
+        },
+        "e336c6b8-418d-9340-d77f-7a9e4cfe0702": {
+          "weapon": "Sheriff",
+          "skinDisplayName": "Mythmaker Sheriff",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/c2aee89c-4f9c-47a9-8dc0-f9a53535d508/displayicon.png"
+        },
+        "1baa85b4-4c70-1284-64bb-6481dfc3bb4e": {
+          "weapon": "Ghost",
+          "skinDisplayName": "Flutter Ghost",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/d0fbfdee-4961-cf51-24a4-4a853ee9fd0c/displayicon.png"
+        },
+        "2f59173c-4bed-b6c3-2191-dea9b58be9c7": {
+          "weapon": "Melee",
+          "skinDisplayName": "RGX 11z Pro Blade",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/9fb366b6-46df-a722-0cf2-9c9b85936f17/displayicon.png"
+        }
+      }
+    },
+    "55555555-eeee-4eee-8eee-000000000005": {
+      "puuid": "55555555-eeee-4eee-8eee-000000000005",
+      "name": "Duelist#TR1",
+      "RiotName": "Duelist#TR1",
+      "GameName": "Duelist#TR1",
+      "relation": "enemy",
+      "myTeam": "Blue",
+      "partyNumber": 0,
+      "agent": "Sova",
+      "rank": 0,
+      "peakRank": 0,
+      "peakRankAct": null,
+      "level": 12,
+      "rr": 0,
+      "kd": 0.7,
+      "headshotPercentage": 12,
+      "winPercentage": "0 (0)",
+      "lastActive": "2h",
+      "agentImgLink": "https://media.valorant-api.com/agents/320b2a48-4d9b-a075-30f1-1f93a9b638fa/displayicon.png",
+      "team": "Red",
+      "sprays": null,
+      "title": null,
+      "playerCard": null,
+      "weapons": null
+    }
+  },
+  "type": "heartbeat"
+}

@@ -1,0 +1,45 @@
+{
+  "time": 1793700000,
+  "state": "MENUS",
+  "mode": "Competitive",
+  "puuid": "11111111-aaaa-4aaa-8aaa-000000000001",
+  "players": {
+    "11111111-aaaa-4aaa-8aaa-000000000001": {
+      "name": "Emre#EUW",
+      "rank": 21,
+      "peakRank": 23,
+      "peakRankAct": "e9a2",
+      "level": 412,
+      "rr": 57,
+      "kd": 1.24,
+      "headshotPercentage": 27,
+      "winPercentage": "61 (88)",
+      "lastActive": "now"
+    },
+    "22222222-bbbb-4bbb-8bbb-000000000002": {
+      "name": "Kenji#0001",
+      "rank": 18,
+      "peakRank": 20,
+      "peakRankAct": "e9a2",
+      "level": 233,
+      "rr": 12,
+      "kd": 0.98,
+      "headshotPercentage": 19,
+      "winPercentage": "52 (41)",
+      "lastActive": "now"
+    },
+    "66666666-ffff-4fff-8fff-000000000006": {
+      "name": "Mara#EUW",
+      "rank": 12,
+      "peakRank": 14,
+      "peakRankAct": "e9a2",
+      "level": 156,
+      "rr": 44,
+      "kd": 1.02,
+      "headshotPercentage": 22,
+      "winPercentage": "49 (35)",
+      "lastActive": "now"
+    }
+  },
+  "type": "heartbeat"
+}

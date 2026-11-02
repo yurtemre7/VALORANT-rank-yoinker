@@ -29,6 +29,18 @@ Running log of local changes on branch `local-tweaks` vs fork `main`. Append eve
 ### 2026-11-03 - tracking docs
 - `UPDATES.md`, `AGENT.md` added. Docs only.
 
+### 2026-11-03 - players UI (spec/plan in `plans/2026-11-03-players-ui*.md`)
+| File | Change | Why |
+|---|---|---|
+| `src/server.py` `Server.start_docs_server` | Extra log line `players UI at http://127.0.0.1:{docs_port}/players.html?port={ws_port}` | Find the new page |
+| `docs/players.html`, `docs/players.js` (new) | Plain-JS page: player cards (rank/peak/RR/level/K/D/HS/WR, party badge, self highlight) and a loadout modal (skins, buddies, sprays). Reads only the existing `heartbeat` websocket payload; strings go in via `textContent` only | Rich player view like upstream PR #171, minimal code |
+| `docs/vendor/tailwind.js` (new) | Vendored `@tailwindcss/browser@4.3.4` (sha256 `e54f393a…dcb012aa`) | Tailwind without CDN at runtime |
+| `docs/players.sample.json`, `docs/players.lobby.sample.json` (new) | Demo payloads for `players.html?demo` (in match) and `?demo=lobby` (MENUS) | Test without VALORANT |
+| `tests/test_players_page.py` (new), `tests/test_tracker_server.py` | Fixture shape, page wiring, no `innerHTML` templates, rank names; docs server serves `players.html` and logs its URL | Regression cover |
+
+- Lobby: the MENUS heartbeat has party members' name/rank/level/stats only. Riot exposes other players' equipped loadouts only per match (from agent select), so friends' skins appear in PREGAME/INGAME, not in the lobby.
+- Re-port: self-contained in `docs/players.*` + `docs/vendor/`; depends only on the `heartbeat` field names in `main.py`, plus the one log line.
+
 ## How to re-port onto a newer upstream/fork
 Each patch is independent. Find the symbol, re-apply, run the tests.
 

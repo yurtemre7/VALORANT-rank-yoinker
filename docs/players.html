@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>vRY Players</title>
+    <link rel="icon" type="image/png" href="assets/Logo.png">
+    <script src="vendor/tailwind.js"></script>
+    <script src="players.js" defer></script>
+</head>
+<body class="min-h-screen bg-zinc-950 bg-cover bg-center bg-fixed text-zinc-100 antialiased">
+    <div class="min-h-screen bg-zinc-950/85 backdrop-blur-sm">
+        <header class="flex flex-wrap items-center gap-3 border-b border-white/10 px-6 py-4">
+            <h1 class="text-lg font-bold tracking-wide">vRY Players</h1>
+            <span id="mode" class="rounded bg-white/10 px-2 py-0.5 text-sm"></span>
+            <span id="state" class="rounded bg-white/10 px-2 py-0.5 text-sm"></span>
+            <span id="status" class="ml-auto text-sm text-zinc-400">Connecting…</span>
+        </header>
+
+        <main class="grid gap-6 p-6 lg:grid-cols-2">
+            <section id="alliesSection">
+                <h2 id="alliesTitle" class="mb-3 text-sm font-semibold uppercase tracking-widest text-sky-400">Allies</h2>
+                <div id="allies" class="grid gap-3"></div>
+            </section>
+            <section id="enemiesSection">
+                <h2 class="mb-3 text-sm font-semibold uppercase tracking-widest text-rose-400">Enemies</h2>
+                <div id="enemies" class="grid gap-3"></div>
+            </section>
+        </main>
+    </div>
+
+    <dialog id="loadout" class="m-auto w-full max-w-4xl rounded-xl bg-transparent p-0 text-zinc-100 backdrop:bg-black/70">
+        <div class="rounded-xl border border-white/10 bg-zinc-900 p-6">
+            <div class="mb-4 flex items-start gap-4">
+                <div id="loadoutHead" class="flex flex-1 items-center gap-4"></div>
+                <button id="loadoutClose" type="button" class="rounded bg-white/10 px-3 py-1 text-sm hover:bg-white/20">Close</button>
+            </div>
+            <div id="loadoutBody"></div>
+        </div>
+    </dialog>
+</body>
+</html>

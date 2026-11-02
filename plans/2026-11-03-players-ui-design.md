@@ -33,7 +33,8 @@ Any field may be missing or null; render `—` (or omit the image).
 ## Behaviour
 - **Connect:** `ws://${location.hostname || "localhost"}:${port}/`, `port` from `?port=` else `1100` (same rule as `matchLoadouts.js`). On close, show "Disconnected — retrying…" and reconnect every 3 s.
 - **Messages:** ignore all types except `heartbeat`; keep the latest and re-render.
-- **Demo:** `?demo` fetches `players.sample.json` and renders it once, no websocket.
+- **Demo:** `?demo` fetches `players.sample.json` and renders it once, no websocket. `?demo=lobby` loads `players.lobby.sample.json` (MENUS shape).
+- **Lobby (MENUS):** heartbeat entries have no `relation`/`agent`/`weapons`; show one "Party" column. Friends' loadouts are not available from Riot before agent select, so the modal says so.
 - **Layout:** header shows `mode`, `state`, and map image as a dimmed background if present. Two columns: Allies, Enemies (by `relation`); MENUS shows one column. Within a column, keep payload order (already level/party sorted by Python).
 - **Card:** player card art (or agent image) on the left; name (self highlighted), title, agent; level; rank name + peak rank name; RR; K/D, HS%, WR. Party badge "P{partyNumber}" with a colour per party number when `partyNumber > 0`.
 - **Rank names:** JS array of 28 names copied from `NUMBERTORANKS` in `src/constants.py` (`Unranked` ×3, Iron 1 … Immortal 3, Radiant). Out-of-range → `—`.
