@@ -193,9 +193,9 @@
     },
     "44444444-dddd-4ddd-8ddd-000000000004": {
       "puuid": "44444444-dddd-4ddd-8ddd-000000000004",
-      "name": "",
-      "RiotName": "",
-      "GameName": "",
+      "name": "#",
+      "RiotName": "#",
+      "GameName": "#",
       "relation": "enemy",
       "myTeam": "Blue",
       "partyNumber": 0,

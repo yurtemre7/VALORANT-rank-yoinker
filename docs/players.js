@@ -42,8 +42,10 @@ function rank(tier, label) {
     return el("span", name ? RANK_COLORS[Math.floor(tier / 3)] : "text-zinc-500", `${label} ${name ?? "—"}`);
 }
 
+// Streamer mode / unresolved names arrive as "#" (src/names.py), like the terminal fallback in src/colors.py.
 function displayName(p) {
-    return p.name || (p.agent ? `${p.agent} (hidden)` : "—");
+    if (!/^#*$/.test(p.name || "")) return p.name;
+    return p.agent ? `${p.agent} (hidden)` : "—";
 }
 
 function card(puuid, p, selfPuuid) {

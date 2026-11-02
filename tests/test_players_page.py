@@ -28,7 +28,7 @@ class PlayersPageTests(unittest.TestCase):
 
         names = [p["name"] for p in players.values()]
         self.assertIn("<img src=x onerror=alert(1)>", names)
-        self.assertIn("", names)
+        self.assertIn("#", names)  # streamer mode: src/names.py sends "#"
         self.assertTrue(any(p["weapons"] is None and p["sprays"] is None for p in players.values()))
 
         full = [p for p in players.values() if p["weapons"] and len(p["weapons"]) >= 3]
