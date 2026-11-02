@@ -36,12 +36,18 @@ from src.table import Table
 from src.websocket import Ws
 from src.live_backbone import LiveBackbone
 from src.os_info import get_os
+from src.party_sort import sort_players_by_level_and_party
 
 from src.account_manager.account_manager import AccountManager
 from src.account_manager.account_config import AccountConfig
 from src.account_manager.account_auth import AccountAuth
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# make sure non-ASCII output (e.g. the delta header) cannot raise UnicodeEncodeError
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
 
 os.system(f"title VALORANT rank yoinker v{version}")
 
@@ -644,12 +650,7 @@ try:
                         namesClass.get_players_puuid(Players), presence
                     )
                     # log(f"retrieved names dict: {names}")
-                    Players.sort(
-                        key=lambda Players: Players["PlayerIdentity"].get(
-                            "AccountLevel"
-                        ),
-                        reverse=True,
-                    )
+                    sort_players_by_level_and_party(Players, partyOBJ)
                     Players.sort(key=lambda Players: Players["TeamID"], reverse=True)
                     partyCount = 0
                     partyNum = 0
@@ -965,12 +966,7 @@ try:
                     partyMembers = menu.get_party_members(Requests.puuid, presence)
                     partyMembersList = [a["Subject"] for a in partyMembers]
                     # log(f"retrieved names dict: {names}")
-                    Players.sort(
-                        key=lambda Players: Players["PlayerIdentity"].get(
-                            "AccountLevel"
-                        ),
-                        reverse=True,
-                    )
+                    sort_players_by_level_and_party(Players, partyOBJ)
                     partyCount = 0
                     partyIcons = {}
 
@@ -1196,12 +1192,7 @@ try:
                 playersLoaded = 1
                 with richConsole.status("Loading Players...") as status:
                     # log(f"retrieved names dict: {names}")
-                    Players.sort(
-                        key=lambda Players: Players["PlayerIdentity"].get(
-                            "AccountLevel"
-                        ),
-                        reverse=True,
-                    )
+                    sort_players_by_level_and_party(Players, {})
                     seen = []
                     for player in Players:
 

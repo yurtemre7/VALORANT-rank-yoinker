@@ -48,6 +48,9 @@ class Colors:
         self, team, name, playerPuuid, selfPuuid, agent=None, party_members=None
     ):
         orig_name = name
+        if agent is not None and name.strip("#") == "":
+            # streamer mode returns an empty name
+            name = orig_name = self.agent_dict.get(agent.lower(), "Player") + " (hidden)"
         if agent is not None:
             if self.hide_names:
                 if agent != "":
