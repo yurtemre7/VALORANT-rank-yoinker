@@ -389,7 +389,10 @@ try:
     def print_info():
         if cfg.get_feature_flag("pre_cls") or firstPrint:
             os.system("cls")
-            print("\nvRY Mobile", color(f"- {get_ip()}:{cfg.port}", fore=(255, 127, 80)))
+            # A page URL a phone on the same network can open (the docs server listens on all
+            # interfaces); falls back to the bare websocket address without the docs server.
+            mobile_url = Server.get_players_url(cfg.port, host=get_ip())
+            print("\nvRY Mobile", color(f"- {mobile_url or f'{get_ip()}:{cfg.port}'}", fore=(255, 127, 80)))
 
             inventories_url = (PROJECT_ROOT / Path("docs/matchLoadouts.html")).resolve().as_uri()
             inventories_link = (

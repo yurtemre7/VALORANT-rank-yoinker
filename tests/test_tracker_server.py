@@ -73,6 +73,29 @@ class TrackerServerTests(unittest.TestCase):
                     tracker.docs_server.shutdown()
                     tracker.docs_server.server_close()
 
+    def test_docs_server_is_reachable_from_lan_for_phones(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            docs = root / "docs"
+            docs.mkdir()
+            (docs / "matchLoadouts.html").write_text("tracker-ok", encoding="utf-8")
+
+            tracker = server_module.Server(lambda _: None, Error=None)
+            self.assertIsNone(tracker.get_players_url(65535, host="192.168.1.5"))
+
+            with patch.object(server_module, "PROJECT_ROOT", root), patch.dict(server_module.os.environ):
+                tracker.start_docs_server(65535)
+                try:
+                    # All interfaces, so a phone on the same network can load the pages.
+                    self.assertEqual(tracker.docs_server.server_address[0], "0.0.0.0")
+                    self.assertEqual(
+                        tracker.get_players_url(65535, host="192.168.1.5"),
+                        f"http://192.168.1.5:{tracker.docs_port}/players.html?port=65535",
+                    )
+                finally:
+                    tracker.docs_server.shutdown()
+                    tracker.docs_server.server_close()
+
 
 if __name__ == "__main__":
     unittest.main()

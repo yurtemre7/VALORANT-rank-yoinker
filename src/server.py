@@ -95,7 +95,7 @@ class Server:
             self.log(f"tracker UI local server failed ({exc}); using {fallback}")
 
     def start_docs_server(self, websocket_port):
-        """Serve the bundled tracker UI over localhost so terminal links use HTTP."""
+        """Serve the bundled tracker UI over HTTP so terminal links (and phones on the LAN) can open it."""
         docs_dir = _resolve_docs_dir()
         if docs_dir is None:
             self.docs_server = None
@@ -108,13 +108,15 @@ class Server:
         handler = functools.partial(_QuietStaticHandler, directory=str(docs_dir))
 
         preferred_port = websocket_port + 1 if int(websocket_port) < 65535 else 0
+        # All interfaces, like the websocket server, so a phone on the same network
+        # can load the pages; they then connect back to the websocket on this host.
         try:
             self.docs_server = ThreadingHTTPServer(
-                ("127.0.0.1", preferred_port), handler
+                ("0.0.0.0", preferred_port), handler
             )
         except OSError:
             # Avoid failing vRY just because the adjacent port is already occupied.
-            self.docs_server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+            self.docs_server = ThreadingHTTPServer(("0.0.0.0", 0), handler)
 
         self.docs_port = self.docs_server.server_address[1]
         threading.Thread(
@@ -126,12 +128,15 @@ class Server:
         browser_url = self.get_match_loadouts_url(websocket_port)
         os.environ["VRY_TRACKER_URL"] = browser_url
         self.log(f"tracker UI serving {docs_dir} at {browser_url}")
-        players_url = (
-            f"http://127.0.0.1:{self.docs_port}/players.html"
-            f"?port={int(websocket_port)}"
-        )
+        players_url = self.get_players_url(websocket_port)
         os.environ["VRY_PLAYERS_URL"] = players_url
         self.log(f"players UI at {players_url}")
+
+    def get_players_url(self, websocket_port, host="127.0.0.1"):
+        """Players dashboard URL on `host` (e.g. the LAN IP for phones); None without the docs server."""
+        if self.docs_port is None:
+            return None
+        return f"http://{host}:{self.docs_port}/players.html?port={int(websocket_port)}"
 
     def get_match_loadouts_url(self, websocket_port):
         if self.docs_port is not None:

@@ -74,6 +74,17 @@ Running log of local changes on branch `local-tweaks` vs fork `main`. Append eve
 | `docs/players.sample.json` | Placeholder stats, an unlocked hidden enemy, a flex emote | Demo the edge cases |
 | `tests/test_players_page.py` | Edge-case fixture shape, new keys, bundled names cover every fixture uuid | Regression cover |
 
+### 2026-11-03 - dashboard on phones (LAN)
+| File | Change | Why |
+|---|---|---|
+| `src/server.py` `Server.start_docs_server` | Docs HTTP server binds `0.0.0.0` (was `127.0.0.1`), same as the websocket server | Phones on the LAN could not load any page; `vRY Mobile ip:1100` is only the websocket (empty reply in a browser) |
+| `src/server.py` `Server.get_players_url(websocket_port, host="127.0.0.1")` (new) | Builds the players URL for any host; `None` without docs server. `VRY_PLAYERS_URL` now uses it | One place for the URL |
+| `main.py` `print_info` | `vRY Mobile` line prints `http://<lan-ip>:<docs_port>/players.html?port=<ws_port>` (falls back to the old `ip:port`) | Openable link for the phone |
+| `tests/test_tracker_server.py` | Asserts `0.0.0.0` bind and the LAN URL | Regression cover |
+| `HOW-TO-RUN.md` | Phone setup: network profile Private + firewall rule for `uv`'s `cpython-3.14-windows-…` junction path | Existing rules pointed at `cpython-3.14.6-…`, which does not match the running process |
+
+- Exposure: anyone on the same network can now open the pages (read-only match view); the websocket on 1100 was already LAN-reachable before.
+
 ## How to re-port onto a newer upstream/fork
 Each patch is independent. Find the symbol, re-apply, run the tests.
 
