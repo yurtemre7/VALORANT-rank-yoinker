@@ -31,4 +31,5 @@ Local, personal fork of the VALORANT rank yoinker (latenitekode fork): a console
 ## Rules
 - Append every future change to `UPDATES.md` (dated entry: file, what, why, plus re-port notes).
 - Keep edits minimal and match surrounding style; commit on `local-tweaks`.
+- Never merge `local-tweaks` into `main` and never open PRs upstream. Remotes: `fork` = the user's own fork `yurtemre7/VALORANT-rank-yoinker` (`local-tweaks` tracks `fork/local-tweaks`; push there only when asked), `origin` = latenitekode, `upstream` = zayKenyon (fetch only, never push).
 - Do not touch: the updater (`updatescript.bat`, update logic in `src/requestsV.py`), the `status.json` check, or the websocket server on `0.0.0.0:1100` beyond what is asked. Do not add network calls.
