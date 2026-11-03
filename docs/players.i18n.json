@@ -33,7 +33,14 @@
       "afk": "AFK",
       "notReady": "Not ready",
       "rankGap": "Rank gap penalty",
-      "queueBlocked": "Queue blocked"
+      "queueBlocked": "Queue blocked",
+      "account": "Account",
+      "dailyStore": "Daily store",
+      "resetsIn": "Resets in",
+      "battlePass": "Battle pass",
+      "level": "Level",
+      "recentRanked": "Recent ranked",
+      "placement": "Placement"
     },
     "states": {
       "MENUS": "Lobby",
@@ -55,6 +62,12 @@
       "Snowball Fight": "Snowball Fight",
       "All Random One Site": "All Random One Site",
       "Knockout": "Knockout"
+    },
+    "currencies": {
+      "85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741": "VALORANT Points",
+      "e59aa87c-4cbf-517a-5983-6e81511be9b7": "Radianite Points",
+      "85ca954a-41f2-ce94-9b45-8ca3dd39a00d": "Kingdom Credits",
+      "f08d4ae3-939c-4576-ab26-09ce1f23bb37": "Agent Tokens"
     },
     "ranks": [
       "Unranked", "Unranked", "Unranked",
@@ -99,7 +112,14 @@
       "afk": "AFK",
       "notReady": "Hazır değil",
       "rankGap": "Rütbe farkı cezası",
-      "queueBlocked": "Sıra engelli"
+      "queueBlocked": "Sıra engelli",
+      "account": "Hesap",
+      "dailyStore": "Günlük mağaza",
+      "resetsIn": "Yenilenmesine",
+      "battlePass": "Savaş Bileti",
+      "level": "Seviye",
+      "recentRanked": "Son rekabetçi maçlar",
+      "placement": "Yerleştirme"
     },
     "states": {
       "MENUS": "Lobi",
@@ -121,6 +141,12 @@
       "Snowball Fight": "Kartopu Çatışması",
       "All Random One Site": "AR1S (Tek Bölgede Hepsi Rasgele)",
       "Knockout": "Nakavt"
+    },
+    "currencies": {
+      "85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741": "VALORANT Puanı",
+      "e59aa87c-4cbf-517a-5983-6e81511be9b7": "Radyanit Puanı",
+      "85ca954a-41f2-ce94-9b45-8ca3dd39a00d": "Kingdom Kredisi",
+      "f08d4ae3-939c-4576-ab26-09ce1f23bb37": "Ajan Sembolleri"
     },
     "ranks": [
       "Derecesiz", "Derecesiz", "Derecesiz",
