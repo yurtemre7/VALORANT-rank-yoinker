@@ -101,6 +101,10 @@ Running log of local changes on branch `local-tweaks` vs fork `main`. Append eve
 ### 2026-11-03 - players UI: square card icons
 - `docs/players.js` `squareCard(url)`: valorant-api has three card shapes (`smallart` 128x128, `wideart` 452x128, `largeart` 268x640). The payload carries `largeart` (kept, `matchLoadouts` uses it); every image slot on the players page is square, so party/player cards, friend rows and the loadout header now load `smallart`. Test: `test_square_card_art`.
 
+### 2026-11-03 - docs server: no stale pages
+- `src/server.py` `_QuietStaticHandler.end_headers`: sends `Cache-Control: no-cache`, so browsers revalidate (304 when unchanged). Without it a browser kept running the old `players.js` after the square-card-art update (seen live). Test: `test_docs_server_serves_players_page_and_logs_url`.
+- `AGENT.md`: the blanket "Do not add network calls" rule is replaced by a rule for legitimate Riot calls (documented endpoints via `Requests.fetch`, own/party data or what the client shows, nothing hidden, no automation, cached and on demand).
+
 ## How to re-port onto a newer upstream/fork
 Each patch is independent. Find the symbol, re-apply, run the tests.
 

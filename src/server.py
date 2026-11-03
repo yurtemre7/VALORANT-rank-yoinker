@@ -20,6 +20,12 @@ class _QuietStaticHandler(SimpleHTTPRequestHandler):
     def log_message(self, format, *args):
         return
 
+    def end_headers(self):
+        # Always revalidate (cheap 304 when unchanged); otherwise browsers keep running
+        # an old players.js after an update.
+        self.send_header("Cache-Control", "no-cache")
+        super().end_headers()
+
 
 def _candidate_docs_dirs():
     """Return likely bundled docs directories for source and frozen builds."""

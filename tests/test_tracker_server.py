@@ -62,6 +62,8 @@ class TrackerServerTests(unittest.TestCase):
                     url = f"http://127.0.0.1:{tracker.docs_port}/players.html"
                     with urlopen(url, timeout=2) as response:
                         self.assertEqual(response.read().decode("utf-8"), "players-ok")
+                        # Browsers must revalidate, or an updated players.js is ignored after an update.
+                        self.assertEqual(response.headers.get("Cache-Control"), "no-cache")
                     self.assertTrue(
                         any("/players.html?port=65535" in line for line in logs), logs
                     )

@@ -31,5 +31,6 @@ Local, personal fork of the VALORANT rank yoinker (latenitekode fork): a console
 ## Rules
 - Append every future change to `UPDATES.md` (dated entry: file, what, why, plus re-port notes).
 - Keep edits minimal and match surrounding style; commit on `local-tweaks`.
+- New Riot calls are allowed only if they (1) use community-documented endpoints (valapidocs) through `Requests.fetch` with the auth vRY already has, no scraping or workarounds; (2) read only your own account/party data or data the game client itself shows you; (3) never reveal hidden information (streamer-mode names, hidden enemy data) or automate gameplay (no instalock); (4) are cached and on demand, never tight polling. Add each new endpoint to `UPDATES.md`.
 - Never merge `local-tweaks` into `main` and never open PRs upstream. Remotes: `fork` = the user's own fork `yurtemre7/VALORANT-rank-yoinker` (`local-tweaks` tracks `fork/local-tweaks`; push there only when asked), `origin` = latenitekode, `upstream` = zayKenyon (fetch only, never push).
-- Do not touch: the updater (`updatescript.bat`, update logic in `src/requestsV.py`), the `status.json` check, or the websocket server on `0.0.0.0:1100` beyond what is asked. Do not add network calls.
+- Do not touch: the updater (`updatescript.bat`, update logic in `src/requestsV.py`), the `status.json` check, or the websocket server on `0.0.0.0:1100` beyond what is asked.
