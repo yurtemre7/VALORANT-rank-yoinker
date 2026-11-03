@@ -3,6 +3,9 @@
 const DEFAULT_PORT = "1100";
 const LANG_KEY = "vry.lang";
 // Riot's official Turkish weapon and skin names, looked up by the uuids in the payload.
+// The bundled file (tools/update_tr_names.py) is used first; the live list is only
+// downloaded when an open loadout has a uuid the file does not know yet.
+const TR_NAMES_FILE = "players.tr-names.json";
 const TR_WEAPONS_URL = "https://valorant-api.com/v1/weapons?language=tr-TR";
 // One colour per rank group (Unranked, Iron, ..., Radiant); index = Math.floor(tier / 3).
 const RANK_COLORS = [
@@ -13,15 +16,42 @@ const PARTY_COLORS = ["bg-amber-500", "bg-sky-500", "bg-fuchsia-500", "bg-emeral
 
 let I18N = null;
 let lang = localStorage.getItem(LANG_KEY) === "tr" ? "tr" : "en";
-let trNames = null;
+let trNames = null; // Map uuid -> Turkish name, from the bundled file (+ live names after a miss)
+let trLive = null; // at most one live download per page load
 let lastHeartbeat = null;
 let openPlayer = null;
 let statusKey = "connecting";
 
 const $ = (id) => document.getElementById(id);
-const show = (v) => (v === null || v === undefined || v === "" ? "—" : String(v));
+// The Python side sends "N/A" for missing K/D and HS, and "None (0)" for a missing win rate.
+const missing = (v) => v === null || v === undefined || v === "" || v === "N/A" || /^(None|N\/A) \(/.test(String(v));
+const show = (v) => (missing(v) ? "—" : String(v));
+const percent = (v) => (missing(v) ? "—" : `${v}%`);
+// main.py sends "Unknown" until the player locks an agent.
+const agentOf = (p) => (p.agent && p.agent !== "Unknown" ? p.agent : null);
+const subtitle = (p) => [agentOf(p), p.title].filter(Boolean).join(" · ");
 const t = (key) => I18N[lang].ui[key];
-const localName = (uuid, fallback) => (lang === "tr" && trNames?.get(String(uuid).toLowerCase())) || fallback;
+
+function localName(uuid, fallback) {
+    if (lang !== "tr" || !trNames || !uuid) return fallback;
+    const name = trNames.get(String(uuid).toLowerCase());
+    if (name === undefined) fetchLiveTrNames();
+    return name || fallback;
+}
+
+function fetchLiveTrNames() {
+    if (trLive) return;
+    trLive = fetch(TR_WEAPONS_URL)
+        .then((r) => r.json())
+        .then(({ data }) => {
+            for (const weapon of data) {
+                trNames.set(weapon.uuid, weapon.displayName);
+                for (const skin of weapon.skins) trNames.set(skin.uuid, skin.displayName);
+            }
+            rerender();
+        })
+        .catch(() => {}); // unknown skins keep their English names
+}
 
 // The only way payload strings reach the DOM: textContent, never innerHTML.
 function el(tag, className = "", text) {
@@ -48,7 +78,14 @@ function rank(tier, label) {
 // Streamer mode / unresolved names arrive as "#" (src/names.py), like the terminal fallback in src/colors.py.
 function displayName(p) {
     if (!/^#*$/.test(p.name || "")) return p.name;
-    return p.agent ? `${p.agent} (${t("hidden")})` : "—";
+    return agentOf(p) ? `${agentOf(p)} (${t("hidden")})` : t("hiddenPlayer");
+}
+
+function iconRow(heading, items) {
+    if (!items.length) return [];
+    const row = el("div", "mt-4 flex flex-wrap gap-3");
+    for (const item of items) row.append(img(item.displayIcon, "h-16 w-16 rounded bg-white/5 object-contain p-1"));
+    return [el("h3", "mt-6 text-sm font-semibold uppercase tracking-widest text-zinc-400", heading), row];
 }
 
 function card(puuid, p, selfPuuid) {
@@ -67,12 +104,12 @@ function card(puuid, p, selfPuuid) {
     }
     top.append(el("span", "ml-auto text-sm text-zinc-400", `${t("lv")} ${show(p.level)}`));
     info.append(top);
-    if (p.title || p.agent) info.append(el("div", "truncate text-xs text-zinc-400", [p.agent, p.title].filter(Boolean).join(" · ")));
+    if (subtitle(p)) info.append(el("div", "truncate text-xs text-zinc-400", subtitle(p)));
 
     const ranks = el("div", "mt-1 flex flex-wrap gap-x-3 text-sm");
     ranks.append(rank(p.rank, ""), rank(p.peakRank, t("peak")), el("span", "text-zinc-400", `${show(p.rr)} RR`));
     const stats = el("div", "mt-1 flex flex-wrap gap-x-3 text-xs text-zinc-400");
-    stats.append(el("span", "", `${t("kd")} ${show(p.kd)}`), el("span", "", `${t("hs")} ${show(p.headshotPercentage)}%`),
+    stats.append(el("span", "", `${t("kd")} ${show(p.kd)}`), el("span", "", `${t("hs")} ${percent(p.headshotPercentage)}`),
         el("span", "", `${t("wr")} ${show(p.winPercentage)}`));
     info.append(ranks, stats);
     root.append(info);
@@ -89,7 +126,7 @@ function openLoadout(p) {
     const art = img(p.playerCard || p.agentImgLink, "h-24 w-24 rounded-lg object-cover");
     if (art) head.append(art);
     const who = el("div");
-    who.append(el("div", "text-xl font-bold", displayName(p)), el("div", "text-sm text-zinc-400", [p.agent, p.title].filter(Boolean).join(" · ")));
+    who.append(el("div", "text-xl font-bold", displayName(p)), el("div", "text-sm text-zinc-400", subtitle(p)));
     head.append(who);
 
     const weapons = Object.entries(p.weapons || {}).filter(([, w]) => w.weapon)
@@ -102,7 +139,8 @@ function openLoadout(p) {
         for (const w of weapons) {
             const tile = el("div", "relative flex flex-col gap-2 rounded-lg border border-white/10 bg-white/5 p-3");
             tile.append(img(w.skinDisplayIcon, "h-16 w-full object-contain") || el("div", "h-16"),
-                el("div", "text-xs uppercase tracking-wide text-zinc-400", w.weapon),
+                // Uppercase in JS, not CSS: under lang="tr" CSS would turn an English fallback "Sheriff" into "SHERİFF".
+                el("div", "text-xs tracking-wide text-zinc-400", w.weapon.toUpperCase()),
                 el("div", "truncate text-sm", show(w.skinDisplayName)));
             const buddy = img(w.buddy_displayIcon, "absolute right-2 top-2 h-8 w-8");
             if (buddy) tile.append(buddy);
@@ -111,12 +149,10 @@ function openLoadout(p) {
         body.append(grid);
     }
 
-    const sprays = Object.values(p.sprays || {}).filter((s) => s && s.displayIcon);
-    if (sprays.length) {
-        const row = el("div", "mt-4 flex gap-3");
-        for (const s of sprays) row.append(img(s.displayIcon, "h-16 w-16 rounded bg-white/5 object-contain p-1"));
-        body.append(el("h3", "mt-6 text-sm font-semibold uppercase tracking-widest text-zinc-400", t("sprays")), row);
-    }
+    // src/Loadouts.py tags each expression as "spray" or "flex" (emote).
+    const expressions = Object.values(p.sprays || {}).filter((s) => s && s.displayIcon);
+    body.append(...iconRow(t("sprays"), expressions.filter((s) => s.type !== "flex")),
+        ...iconRow(t("emotes"), expressions.filter((s) => s.type === "flex")));
     if (!$("loadout").open) $("loadout").showModal();
 }
 
@@ -134,7 +170,7 @@ function render(hb) {
     $("allies").replaceChildren(...allies.map(([id, p]) => card(id, p, hb.puuid)));
     $("enemies").replaceChildren(...enemies.map(([id, p]) => card(id, p, hb.puuid)));
     $("enemiesSection").hidden = !enemies.length;
-    if (!entries.length) $("allies").append(el("p", "text-zinc-400", t("waiting")));
+    if (!entries.length) $("allies").append(el("p", "text-zinc-400", t(lobby ? "waitingParty" : "waiting")));
     else if (lobby) $("allies").append(el("p", "text-xs text-zinc-500", t("lobbyNote")));
 }
 
@@ -160,17 +196,13 @@ function setLang(next) {
     }
     rerender();
     if (lang === "tr" && !trNames) {
-        fetch(TR_WEAPONS_URL)
+        fetch(TR_NAMES_FILE)
             .then((r) => r.json())
-            .then(({ data }) => {
-                trNames = new Map();
-                for (const weapon of data) {
-                    trNames.set(weapon.uuid, weapon.displayName);
-                    for (const skin of weapon.skins) trNames.set(skin.uuid, skin.displayName);
-                }
+            .catch(() => ({})) // no local file: every uuid is a miss, so the live list fills in
+            .then((names) => {
+                trNames = new Map(Object.entries(names));
                 rerender();
-            })
-            .catch(() => {}); // English names stay as the fallback; the next switch to Turkish retries.
+            });
     }
 }
 
@@ -202,7 +234,12 @@ async function init() {
     const demo = new URLSearchParams(location.search).get("demo");
     if (demo === null) return connect();
     setStatus("demo");
-    render(await (await fetch(demo === "lobby" ? "players.lobby.sample.json" : "players.sample.json")).json());
+    try {
+        const response = await fetch(demo === "lobby" ? "players.lobby.sample.json" : "players.sample.json");
+        render(await response.json());
+    } catch {
+        setStatus("demoFailed");
+    }
 }
 
 init();

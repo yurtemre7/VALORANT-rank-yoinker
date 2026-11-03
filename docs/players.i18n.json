@@ -19,7 +19,11 @@
       "waiting": "Waiting for match…",
       "noLoadout": "No loadout data",
       "lobbyNote": "Riot only shares loadouts once agent select starts.",
-      "hidden": "hidden"
+      "hidden": "hidden",
+      "hiddenPlayer": "Hidden player",
+      "emotes": "Emotes",
+      "waitingParty": "Waiting for party data…",
+      "demoFailed": "Demo data could not be loaded"
     },
     "states": {
       "MENUS": "Lobby",
@@ -70,7 +74,11 @@
       "waiting": "Maç bekleniyor…",
       "noLoadout": "Ekipman verisi yok",
       "lobbyNote": "Riot ekipmanları yalnızca ajan seçimi başladığında paylaşır.",
-      "hidden": "gizli"
+      "hidden": "gizli",
+      "hiddenPlayer": "Gizli oyuncu",
+      "emotes": "İfadeler",
+      "waitingParty": "Grup verisi bekleniyor…",
+      "demoFailed": "Demo verisi yüklenemedi"
     },
     "states": {
       "MENUS": "Lobi",

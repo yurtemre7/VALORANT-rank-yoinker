@@ -64,6 +64,16 @@ Running log of local changes on branch `local-tweaks` vs fork `main`. Append eve
 ### 2026-11-03 - HOW-TO-RUN.md
 - `HOW-TO-RUN.md` (new): minimal setup/run/demo/troubleshooting/update steps for running from source with uv. Docs only.
 
+### 2026-11-03 - players UI: local Turkish names + display polish
+| File | Change | Why |
+|---|---|---|
+| `docs/players.tr-names.json` (new), `tools/update_tr_names.py` (new) | Bundled copy of Riot's tr-TR weapon/skin names (uuid -> name, ~90 KB). Regenerate with `uv run python tools/update_tr_names.py` | Turkish mode no longer downloads 3.7 MB on every page load |
+| `docs/players.js` `localName` / `fetchLiveTrNames` | Turkish names come from the bundled file; only when an open loadout has an unknown uuid (skin newer than the file) is the live tr-TR list downloaded, at most once per page load. Offline -> English fallback | Local first, network only on a miss |
+| `docs/players.js` | `—` for the Python placeholders (`"N/A"` K/D/HS, `"None (0)"` WR) and no stray `%`; agent `"Unknown"` (not locked yet) is hidden, a hidden name with no agent shows "Hidden player"; flex expressions get their own "Emotes" row; empty lobby says "Waiting for party data…"; a failed demo load shows a status message; weapon labels uppercased in JS (CSS `uppercase` under `lang="tr"` turned "Sheriff" into "SHERİFF") | Review findings |
+| `docs/players.i18n.json` | Keys `hiddenPlayer`, `emotes`, `waitingParty`, `demoFailed` (en/tr) | New strings |
+| `docs/players.sample.json` | Placeholder stats, an unlocked hidden enemy, a flex emote | Demo the edge cases |
+| `tests/test_players_page.py` | Edge-case fixture shape, new keys, bundled names cover every fixture uuid | Regression cover |
+
 ## How to re-port onto a newer upstream/fork
 Each patch is independent. Find the symbol, re-apply, run the tests.
 

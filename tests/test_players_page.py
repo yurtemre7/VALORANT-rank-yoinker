@@ -16,10 +16,10 @@ class PlayersPageTests(unittest.TestCase):
         self.assertEqual(hb["type"], "heartbeat")
         self.assertEqual(hb["state"], "INGAME")
         players = hb["players"]
-        self.assertEqual(len(players), 5)
+        self.assertEqual(len(players), 6)
         relations = [p["relation"] for p in players.values()]
         self.assertEqual(relations.count("ally"), 3)
-        self.assertEqual(relations.count("enemy"), 2)
+        self.assertEqual(relations.count("enemy"), 3)
         self.assertEqual(players[hb["puuid"]]["relation"], "ally")
 
         parties = [p["partyNumber"] for p in players.values() if p["partyNumber"] > 0]
@@ -36,6 +36,17 @@ class PlayersPageTests(unittest.TestCase):
         for weapon in full[0]["weapons"].values():
             for key in ("weapon", "skinDisplayName", "skinDisplayIcon"):
                 self.assertIn(key, weapon)
+
+    def test_sample_payload_edge_cases(self):
+        # Placeholders exactly as the Python side sends them (src/player_stats.py, src/rank.py, main.py).
+        players = load("players.sample.json")["players"].values()
+        self.assertTrue(any(
+            p["kd"] == "N/A" and p["headshotPercentage"] == "N/A" and p["winPercentage"] == "None (0)"
+            for p in players
+        ))
+        self.assertTrue(any(p["name"] == "#" and p["agent"] == "Unknown" for p in players))
+        types = {s["type"] for p in players for s in (p["sprays"] or {}).values()}
+        self.assertTrue({"spray", "flex"} <= types)
 
     def test_lobby_payload_shape(self):
         # Mirrors the MENUS heartbeat in main.py: party members only, no loadout fields.
@@ -75,6 +86,8 @@ class PlayersPageTests(unittest.TestCase):
         self.assertEqual(en["ranks"][26], "Immortal 3")
         self.assertEqual(tr["ranks"][27], "Radyant")
         self.assertEqual(sorted(en["states"]), ["INGAME", "MENUS", "PREGAME"])
+        for key in ("hiddenPlayer", "emotes", "waitingParty", "demoFailed"):
+            self.assertIn(key, en["ui"])
 
     def test_i18n_covers_every_game_mode(self):
         from src.constants import gamemodes
@@ -88,7 +101,7 @@ class PlayersPageTests(unittest.TestCase):
         self.assertIn('data-lang="en"', html)
         self.assertIn('data-lang="tr"', html)
         js = (DOCS / "players.js").read_text(encoding="utf-8")
-        for needle in ("players.i18n.json", '"vry.lang"', "language=tr-TR"):
+        for needle in ("players.i18n.json", '"vry.lang"', "players.tr-names.json", "language=tr-TR"):
             self.assertIn(needle, js)
 
     def test_sample_weapons_carry_skin_ids(self):
@@ -97,6 +110,18 @@ class PlayersPageTests(unittest.TestCase):
         weapons = [w for p in hb["players"].values() for w in (p["weapons"] or {}).values()]
         self.assertTrue(weapons)
         self.assertTrue(all(re.fullmatch(r"[0-9a-f-]{36}", w.get("skin", "")) for w in weapons))
+
+    def test_bundled_turkish_names(self):
+        # Local copy of Riot's tr-TR names; the page only goes online for uuids missing here.
+        names = load("players.tr-names.json")
+        self.assertTrue(all(re.fullmatch(r"[0-9a-f-]{36}", uuid) for uuid in names))
+        self.assertEqual(names["9c82e19d-4575-0200-1a81-3eacf00cf872"], "VANDAL")
+        self.assertEqual(names["2f59173c-4bed-b6c3-2191-dea9b58be9c7"], "YAKIN DÖVÜŞ SİLAHI")
+        hb = load("players.sample.json")
+        for p in hb["players"].values():
+            for weapon_id, w in (p["weapons"] or {}).items():
+                self.assertIn(weapon_id, names)
+                self.assertIn(w["skin"], names)
 
 
 if __name__ == "__main__":

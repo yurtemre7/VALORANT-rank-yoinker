@@ -69,3 +69,9 @@ git push --force-with-lease fork local-tweaks
 ```
 
 Never merge into `main` or push to `origin` / `upstream` (see `AGENT.md`).
+
+After a VALORANT patch with new skins, refresh the bundled Turkish names (the page also fetches missing ones live):
+
+```powershell
+uv run python tools/update_tr_names.py
+```
