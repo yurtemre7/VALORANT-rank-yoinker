@@ -11,10 +11,14 @@
 <body class="min-h-screen bg-zinc-950 bg-cover bg-center bg-fixed text-zinc-100 antialiased">
     <div class="min-h-screen bg-zinc-950/85 backdrop-blur-sm">
         <header class="flex flex-wrap items-center gap-3 border-b border-white/10 px-6 py-4">
-            <h1 class="text-lg font-bold tracking-wide">vRY Players</h1>
+            <h1 class="text-lg font-bold tracking-wide" data-i18n="title">vRY Players</h1>
             <span id="mode" class="rounded bg-white/10 px-2 py-0.5 text-sm"></span>
             <span id="state" class="rounded bg-white/10 px-2 py-0.5 text-sm"></span>
-            <span id="status" class="ml-auto text-sm text-zinc-400">Connecting…</span>
+            <span id="status" class="ml-auto text-sm text-zinc-400"></span>
+            <div class="flex overflow-hidden rounded border border-white/10 text-sm">
+                <button type="button" data-lang="en" class="px-2 py-0.5 hover:bg-white/10">EN</button>
+                <button type="button" data-lang="tr" class="px-2 py-0.5 hover:bg-white/10">TR</button>
+            </div>
         </header>
 
         <main class="grid gap-6 p-6 lg:grid-cols-2">
@@ -23,7 +27,7 @@
                 <div id="allies" class="grid gap-3"></div>
             </section>
             <section id="enemiesSection">
-                <h2 class="mb-3 text-sm font-semibold uppercase tracking-widest text-rose-400">Enemies</h2>
+                <h2 class="mb-3 text-sm font-semibold uppercase tracking-widest text-rose-400" data-i18n="enemies">Enemies</h2>
                 <div id="enemies" class="grid gap-3"></div>
             </section>
         </main>
@@ -33,7 +37,7 @@
         <div class="rounded-xl border border-white/10 bg-zinc-900 p-6">
             <div class="mb-4 flex items-start gap-4">
                 <div id="loadoutHead" class="flex flex-1 items-center gap-4"></div>
-                <button id="loadoutClose" type="button" class="rounded bg-white/10 px-3 py-1 text-sm hover:bg-white/20">Close</button>
+                <button id="loadoutClose" type="button" class="rounded bg-white/10 px-3 py-1 text-sm hover:bg-white/20" data-i18n="close">Close</button>
             </div>
             <div id="loadoutBody"></div>
         </div>

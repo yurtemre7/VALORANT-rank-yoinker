@@ -1,0 +1,104 @@
+{
+  "en": {
+    "ui": {
+      "title": "vRY Players",
+      "allies": "Allies",
+      "enemies": "Enemies",
+      "party": "Party",
+      "close": "Close",
+      "sprays": "Sprays",
+      "peak": "Peak",
+      "lv": "Lv",
+      "kd": "K/D",
+      "hs": "HS",
+      "wr": "WR",
+      "connecting": "Connecting…",
+      "connected": "Connected",
+      "disconnected": "Disconnected — retrying…",
+      "demo": "Demo",
+      "waiting": "Waiting for match…",
+      "noLoadout": "No loadout data",
+      "lobbyNote": "Riot only shares loadouts once agent select starts.",
+      "hidden": "hidden"
+    },
+    "states": {
+      "MENUS": "Lobby",
+      "PREGAME": "Agent Select",
+      "INGAME": "In Match"
+    },
+    "modes": {
+      "New Map": "New Map",
+      "Competitive": "Competitive",
+      "Unrated": "Unrated",
+      "Swiftplay": "Swiftplay",
+      "Spike Rush": "Spike Rush",
+      "Deathmatch": "Deathmatch",
+      "Escalation": "Escalation",
+      "Replication": "Replication",
+      "Team Deathmatch": "Team Deathmatch",
+      "Custom": "Custom",
+      "Snowball Fight": "Snowball Fight",
+      "All Random One Site": "All Random One Site",
+      "Knockout": "Knockout"
+    },
+    "ranks": [
+      "Unranked", "Unranked", "Unranked",
+      "Iron 1", "Iron 2", "Iron 3", "Bronze 1", "Bronze 2", "Bronze 3",
+      "Silver 1", "Silver 2", "Silver 3", "Gold 1", "Gold 2", "Gold 3",
+      "Platinum 1", "Platinum 2", "Platinum 3", "Diamond 1", "Diamond 2", "Diamond 3",
+      "Ascendant 1", "Ascendant 2", "Ascendant 3", "Immortal 1", "Immortal 2", "Immortal 3",
+      "Radiant"
+    ]
+  },
+  "tr": {
+    "ui": {
+      "title": "vRY Oyuncular",
+      "allies": "Müttefikler",
+      "enemies": "Rakipler",
+      "party": "Grup",
+      "close": "Kapat",
+      "sprays": "Spreyler",
+      "peak": "En Yüksek",
+      "lv": "Sv",
+      "kd": "K/D",
+      "hs": "HS",
+      "wr": "KO",
+      "connecting": "Bağlanıyor…",
+      "connected": "Bağlandı",
+      "disconnected": "Bağlantı kesildi — yeniden deneniyor…",
+      "demo": "Demo",
+      "waiting": "Maç bekleniyor…",
+      "noLoadout": "Ekipman verisi yok",
+      "lobbyNote": "Riot ekipmanları yalnızca ajan seçimi başladığında paylaşır.",
+      "hidden": "gizli"
+    },
+    "states": {
+      "MENUS": "Lobi",
+      "PREGAME": "Ajan Seçimi",
+      "INGAME": "Maçta"
+    },
+    "modes": {
+      "New Map": "Yeni Harita",
+      "Competitive": "Rekabetçi",
+      "Unrated": "Derecesiz",
+      "Swiftplay": "Tam Gaz",
+      "Spike Rush": "Spike'a Hücum",
+      "Deathmatch": "Ölüm Kalım Savaşı",
+      "Escalation": "Tırmanış",
+      "Replication": "Kopya",
+      "Team Deathmatch": "Takımlı Ölüm Kalım Savaşı",
+      "Custom": "Özel Oyun",
+      "Snowball Fight": "Kartopu Çatışması",
+      "All Random One Site": "AR1S (Tek Bölgede Hepsi Rasgele)",
+      "Knockout": "Nakavt"
+    },
+    "ranks": [
+      "Derecesiz", "Derecesiz", "Derecesiz",
+      "Demir 1", "Demir 2", "Demir 3", "Bronz 1", "Bronz 2", "Bronz 3",
+      "Gümüş 1", "Gümüş 2", "Gümüş 3", "Altın 1", "Altın 2", "Altın 3",
+      "Platin 1", "Platin 2", "Platin 3", "Elmas 1", "Elmas 2", "Elmas 3",
+      "Yücelik 1", "Yücelik 2", "Yücelik 3", "Ölümsüzlük 1", "Ölümsüzlük 2", "Ölümsüzlük 3",
+      "Radyant"
+    ]
+  }
+}

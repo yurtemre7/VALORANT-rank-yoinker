@@ -62,10 +62,41 @@ class PlayersPageTests(unittest.TestCase):
             self.assertIn(needle, js)
         self.assertIsNone(re.search(r"innerHTML\s*=\s*`", js))
 
-    def test_rank_names(self):
+    def test_i18n_languages_match(self):
+        i18n = load("players.i18n.json")
+        self.assertEqual(sorted(i18n), ["en", "tr"])
+        en, tr = i18n["en"], i18n["tr"]
+        self.assertEqual(sorted(en), sorted(tr))
+        for section in ("ui", "states", "modes"):
+            self.assertEqual(sorted(en[section]), sorted(tr[section]), section)
+        self.assertEqual(len(en["ranks"]), 28)
+        self.assertEqual(len(tr["ranks"]), 28)
+        self.assertEqual(en["ranks"][27], "Radiant")
+        self.assertEqual(en["ranks"][26], "Immortal 3")
+        self.assertEqual(tr["ranks"][27], "Radyant")
+        self.assertEqual(sorted(en["states"]), ["INGAME", "MENUS", "PREGAME"])
+
+    def test_i18n_covers_every_game_mode(self):
+        from src.constants import gamemodes
+
+        modes = load("players.i18n.json")["tr"]["modes"]
+        for mode in set(gamemodes.values()):
+            self.assertIn(mode, modes)
+
+    def test_language_toggle_wiring(self):
+        html = (DOCS / "players.html").read_text(encoding="utf-8")
+        self.assertIn('data-lang="en"', html)
+        self.assertIn('data-lang="tr"', html)
         js = (DOCS / "players.js").read_text(encoding="utf-8")
-        self.assertIn('"Radiant"', js)
-        self.assertIn('"Immortal 3"', js)
+        for needle in ("players.i18n.json", '"vry.lang"', "language=tr-TR"):
+            self.assertIn(needle, js)
+
+    def test_sample_weapons_carry_skin_ids(self):
+        # Real payloads carry the skin uuid under "skin" (src/Loadouts.py); Turkish names are looked up by it.
+        hb = load("players.sample.json")
+        weapons = [w for p in hb["players"].values() for w in (p["weapons"] or {}).values()]
+        self.assertTrue(weapons)
+        self.assertTrue(all(re.fullmatch(r"[0-9a-f-]{36}", w.get("skin", "")) for w in weapons))
 
 
 if __name__ == "__main__":

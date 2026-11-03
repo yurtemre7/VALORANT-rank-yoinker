@@ -41,6 +41,18 @@ Running log of local changes on branch `local-tweaks` vs fork `main`. Append eve
 - Lobby: the MENUS heartbeat has party members' name/rank/level/stats only. Riot exposes other players' equipped loadouts only per match (from agent select), so friends' skins appear in PREGAME/INGAME, not in the lobby.
 - Re-port: self-contained in `docs/players.*` + `docs/vendor/`; depends only on the `heartbeat` field names in `main.py`, plus the one log line.
 
+### 2026-11-03 - players UI: English/Turkish toggle
+| File | Change | Why |
+|---|---|---|
+| `docs/players.i18n.json` (new) | `en`/`tr` strings: UI text, game states, game modes (keys = `gamemodes` values in `src/constants.py`), 28 rank names (Riot's official Turkish) | Translations in one place |
+| `docs/players.html` | `EN`/`TR` buttons (`data-lang`), `data-i18n` on static labels | Language toggle |
+| `docs/players.js` | `setLang` saves to `localStorage["vry.lang"]` (default `en`), sets `<html lang>`, re-renders. In Turkish, weapon and skin names come from `valorant-api.com/v1/weapons?language=tr-TR` (browser fetch once per page load, matched by weapon uuid / `skin` uuid in the payload), English fallback if it fails | Turkish weapon/skin names |
+| `docs/players.sample.json` | Weapons carry their `skin` uuid like the real payload | Demo Turkish skin names |
+| `tests/test_players_page.py` | en/tr key parity, 28 ranks, every `gamemodes` value translated, toggle wiring, skin uuids in fixture | Regression cover |
+
+- Not translated: agent names (same in Turkish), player titles (English from the payload), K/D and HS.
+- If a new mode is added to `gamemodes` in `src/constants.py`, add it to both `modes` maps; `test_i18n_covers_every_game_mode` fails until then.
+
 ## How to re-port onto a newer upstream/fork
 Each patch is independent. Find the symbol, re-apply, run the tests.
 
