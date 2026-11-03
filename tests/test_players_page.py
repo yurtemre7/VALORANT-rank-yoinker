@@ -59,7 +59,7 @@ class PlayersPageTests(unittest.TestCase):
         for p in players.values():
             for key in ("name", "rank", "level"):
                 self.assertIn(key, p)
-            for key in ("relation", "weapons", "agent"):
+            for key in ("relation", "agent"):
                 self.assertNotIn(key, p)
 
     def test_lobby_extras_match_python_output(self):
@@ -68,7 +68,7 @@ class PlayersPageTests(unittest.TestCase):
         from tests.test_lobby_info import FRIEND, ME, private, row
 
         hb = load("players.lobby.sample.json")
-        self.assertEqual(set(hb["party"]), set(party_status(private())))
+        self.assertLessEqual(set(party_status(private())), set(hb["party"]))  # plus party_details keys
         self.assertEqual(hb["party"]["state"], "MATCHMAKING")
         extras = set(member_extras(private(), {}))
         for p in hb["players"].values():
@@ -81,6 +81,28 @@ class PlayersPageTests(unittest.TestCase):
         for friend in hb["friends"]:
             self.assertEqual(set(friend), friend_keys)
         self.assertEqual({f["state"] for f in hb["friends"]}, {"INGAME", "PREGAME", "MENUS"})
+
+    def test_lobby_account_part1_matches_python_output(self):
+        # Shapes produced by src/account_info.py (own_loadout, party_details) via main.py.
+        from src.account_info import party_details
+        from tests.test_account_info import METADATA, VANDAL
+        from src.account_info import own_loadout
+
+        hb = load("players.lobby.sample.json")
+        details = party_details({"Members": [{"Subject": "x", "IsReady": True, "Pings": []}]})
+        self.assertLessEqual(set(details) - {"members"}, set(hb["party"]))
+        member_keys = set(details["members"]["x"])
+        for p in hb["players"].values():
+            self.assertLessEqual(member_keys, set(p))
+        self.assertTrue(any(p["isReady"] is False for p in hb["players"].values()))
+        self.assertGreater(hb["party"]["rrPenalty"], 0)
+        me = hb["players"][hb["puuid"]]
+        weapon_keys = set(own_loadout({"Guns": [{"ID": VANDAL, "SkinID": "skin-rgx", "ChromaID": "chroma-red", "CharmID": "buddy-1"}]}, METADATA)[0][VANDAL])
+        self.assertTrue(me["weapons"])
+        for weapon in me["weapons"].values():
+            self.assertLessEqual(set(weapon) - {"buddy_displayIcon"}, weapon_keys)
+        others = [p for puuid, p in hb["players"].items() if puuid != hb["puuid"]]
+        self.assertTrue(all("weapons" not in p for p in others))
 
     def test_ingame_map_is_name_with_splash(self):
         # main.py sends the map name in "map" and the image in "mapSplash".
@@ -113,7 +135,7 @@ class PlayersPageTests(unittest.TestCase):
         self.assertEqual(tr["ranks"][27], "Radyant")
         self.assertEqual(sorted(en["states"]), ["INGAME", "MENUS", "PREGAME"])
         for key in ("hiddenPlayer", "emotes", "waitingParty", "demoFailed", "friends", "inQueue", "matchFound",
-                    "openParty", "closedParty", "partyLeader", "afk"):
+                    "openParty", "closedParty", "partyLeader", "afk", "notReady", "rankGap", "queueBlocked"):
             self.assertIn(key, en["ui"])
 
     def test_i18n_covers_every_game_mode(self):

@@ -165,6 +165,7 @@ def rr_history(raw, map_names):
             "tierAfter": m.get("TierAfterUpdate"),
             "rrAfter": m.get("RankedRatingAfterUpdate"),
             "startTime": m.get("MatchStartTime"),
+            "placement": bool(m.get("IsPlacementMatch")),
         }
         for m in matches[:RR_HISTORY_SIZE]
     ]

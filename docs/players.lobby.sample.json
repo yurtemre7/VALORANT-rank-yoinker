@@ -18,7 +18,75 @@
       "playerCard": "https://media.valorant-api.com/playercards/c8b2f5fd-4331-b172-f3b7-c8a26f356a1f/largeart.png",
       "title": "Sharpshooter",
       "isOwner": true,
-      "isIdle": false
+      "isIdle": false,
+      "isReady": true,
+      "ping": {
+        "region": "Frankfurt",
+        "ms": 14
+      },
+      "weapons": {
+        "9c82e19d-4575-0200-1a81-3eacf00cf872": {
+          "weapon": "Vandal",
+          "skinDisplayName": "RGX 11z Pro Vandal",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/e5490f71-455b-74ad-f762-f5a876d4dff9/displayicon.png",
+          "buddy_displayIcon": "https://media.valorant-api.com/buddies/f2f07eae-4518-15eb-546b-018961e0dd60/displayicon.png",
+          "skin": "e5490f71-455b-74ad-f762-f5a876d4dff9"
+        },
+        "ee8e8d15-496b-07ac-e5f6-8fae5d4c7b1a": {
+          "weapon": "Phantom",
+          "skinDisplayName": "RGX 11z Pro Phantom",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/499acf05-4f79-e345-3714-57bf7aa163ea/displayicon.png",
+          "skin": "499acf05-4f79-e345-3714-57bf7aa163ea"
+        },
+        "a03b24d3-4319-996d-0f8c-94bbfba1dfc7": {
+          "weapon": "Operator",
+          "skinDisplayName": "RGX 11z Pro Operator",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/2e1936ed-4582-628f-da9c-25a7f47323cc/displayicon.png",
+          "skin": "2e1936ed-4582-628f-da9c-25a7f47323cc"
+        },
+        "e336c6b8-418d-9340-d77f-7a9e4cfe0702": {
+          "weapon": "Sheriff",
+          "skinDisplayName": "Mythmaker Sheriff",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/c2aee89c-4f9c-47a9-8dc0-f9a53535d508/displayicon.png",
+          "buddy_displayIcon": "https://media.valorant-api.com/buddies/bf997358-4a99-c1f8-37b0-5fa64200cdce/displayicon.png",
+          "skin": "c2aee89c-4f9c-47a9-8dc0-f9a53535d508"
+        },
+        "1baa85b4-4c70-1284-64bb-6481dfc3bb4e": {
+          "weapon": "Ghost",
+          "skinDisplayName": "Flutter Ghost",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/d0fbfdee-4961-cf51-24a4-4a853ee9fd0c/displayicon.png",
+          "skin": "d0fbfdee-4961-cf51-24a4-4a853ee9fd0c"
+        },
+        "2f59173c-4bed-b6c3-2191-dea9b58be9c7": {
+          "weapon": "Melee",
+          "skinDisplayName": "RGX 11z Pro Blade",
+          "skinDisplayIcon": "https://media.valorant-api.com/weaponskins/9fb366b6-46df-a722-0cf2-9c9b85936f17/displayicon.png",
+          "skin": "9fb366b6-46df-a722-0cf2-9c9b85936f17"
+        }
+      },
+      "sprays": {
+        "0": {
+          "type": "spray",
+          "displayName": "Abilities Don't Kill Spray",
+          "displayIcon": "https://media.valorant-api.com/sprays/7e2ba2e8-4597-060a-b41e-81acedca414e/displayicon.png"
+        },
+        "1": {
+          "type": "spray",
+          "displayName": "Cans On Spray",
+          "displayIcon": "https://media.valorant-api.com/sprays/fe86a4c5-4e92-324b-4c0d-a7a837d0d548/displayicon.png"
+        },
+        "2": {
+          "type": "spray",
+          "displayName": "Hot Seat Spray",
+          "displayIcon": "https://media.valorant-api.com/sprays/7e85d0ab-4cc5-d869-5485-798aae7e8656/displayicon.png"
+        },
+        "3": {
+          "type": "flex",
+          "displayName": "ORA by OneTap Flex",
+          "displayIcon": "https://media.valorant-api.com/flex/fc33f376-4a58-687c-6961-bd8a7e529346/displayicon.png",
+          "fullTransparentIcon": "https://media.valorant-api.com/flex/fc33f376-4a58-687c-6961-bd8a7e529346/displayicon.png"
+        }
+      }
     },
     "22222222-bbbb-4bbb-8bbb-000000000002": {
       "name": "Kenji#0001",
@@ -34,7 +102,12 @@
       "playerCard": "https://media.valorant-api.com/playercards/eef542d2-4724-bc47-f53f-239f8c9c2623/largeart.png",
       "title": "Healer",
       "isOwner": false,
-      "isIdle": false
+      "isIdle": false,
+      "isReady": false,
+      "ping": {
+        "region": "Paris",
+        "ms": 19
+      }
     },
     "66666666-ffff-4fff-8fff-000000000006": {
       "name": "Mara#EUW",
@@ -50,7 +123,9 @@
       "playerCard": "https://media.valorant-api.com/playercards/d32e58b1-4191-7315-ad4a-9da58b3f23dd/largeart.png",
       "title": null,
       "isOwner": false,
-      "isIdle": true
+      "isIdle": true,
+      "isReady": true,
+      "ping": null
     }
   },
   "party": {
@@ -59,7 +134,14 @@
     "queueEntry": 1793700000,
     "accessibility": "CLOSED",
     "size": 3,
-    "maxSize": 5
+    "maxSize": 5,
+    "eligibleQueues": [
+      "unrated",
+      "competitive",
+      "swiftplay"
+    ],
+    "ineligibilities": [],
+    "rrPenalty": 10
   },
   "friends": [
     {

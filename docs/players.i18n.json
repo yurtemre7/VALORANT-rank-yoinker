@@ -18,7 +18,7 @@
       "demo": "Demo",
       "waiting": "Waiting for match…",
       "noLoadout": "No loadout data",
-      "lobbyNote": "Riot only shares loadouts once agent select starts.",
+      "lobbyNote": "Friends' loadouts appear once agent select starts.",
       "hidden": "hidden",
       "hiddenPlayer": "Hidden player",
       "emotes": "Emotes",
@@ -30,7 +30,10 @@
       "openParty": "Open party",
       "closedParty": "Closed party",
       "partyLeader": "Party leader",
-      "afk": "AFK"
+      "afk": "AFK",
+      "notReady": "Not ready",
+      "rankGap": "Rank gap penalty",
+      "queueBlocked": "Queue blocked"
     },
     "states": {
       "MENUS": "Lobby",
@@ -81,7 +84,7 @@
       "demo": "Demo",
       "waiting": "Maç bekleniyor…",
       "noLoadout": "Ekipman verisi yok",
-      "lobbyNote": "Riot ekipmanları yalnızca ajan seçimi başladığında paylaşır.",
+      "lobbyNote": "Arkadaşların ekipmanları ajan seçimi başlayınca görünür.",
       "hidden": "gizli",
       "hiddenPlayer": "Gizli oyuncu",
       "emotes": "İfadeler",
@@ -93,7 +96,10 @@
       "openParty": "Açık grup",
       "closedParty": "Kapalı grup",
       "partyLeader": "Grup lideri",
-      "afk": "AFK"
+      "afk": "AFK",
+      "notReady": "Hazır değil",
+      "rankGap": "Rütbe farkı cezası",
+      "queueBlocked": "Sıra engelli"
     },
     "states": {
       "MENUS": "Lobi",

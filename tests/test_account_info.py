@@ -146,7 +146,9 @@ class AccountInfoTests(unittest.TestCase):
         maps = {"/game/maps/ascent/ascent": "Ascent", "/game/maps/duality/duality": "Bind"}
         history = rr_history({"Matches": matches}, maps)
         self.assertEqual(len(history), 5)
-        self.assertEqual(history[0], {"map": "Ascent", "earned": 18, "tierAfter": 15, "rrAfter": 40, "startTime": 2000})
+        self.assertEqual(history[0], {"map": "Ascent", "earned": 18, "tierAfter": 15, "rrAfter": 40, "startTime": 2000, "placement": False})
+        placement = rr_history({"Matches": [{"MapID": "", "RankedRatingEarned": 0, "IsPlacementMatch": True, "MatchStartTime": 1}]}, maps)
+        self.assertTrue(placement[0]["placement"])
         self.assertEqual(history[1]["map"], "Bind")
         self.assertEqual(rr_history(None, maps), [])
 

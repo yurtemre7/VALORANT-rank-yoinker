@@ -10,6 +10,15 @@ import time
 
 from src import account_info
 
+# valorant-api lists the parsers need (cached by Loadouts._api_get under the same keys).
+METADATA_URLS = {
+    "weapons": "https://valorant-api.com/v1/weapons",
+    "buddies": "https://valorant-api.com/v1/buddies",
+    "sprays": "https://valorant-api.com/v1/sprays",
+    "flex": "https://valorant-api.com/v1/flex",
+    "currencies": "https://valorant-api.com/v1/currencies",
+    "contracts": "https://valorant-api.com/v1/contracts",
+}
 TTL = {"party": 10, "loadout": 60, "wallet": 300, "rr": 300, "contracts": 300, "store": 300}
 FAILURE_RETRY = 30
 

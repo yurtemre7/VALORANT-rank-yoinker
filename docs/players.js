@@ -113,6 +113,8 @@ function partyLine(hb) {
     }
     if (party.accessibility) parts.push(t(party.accessibility === "OPEN" ? "openParty" : "closedParty"));
     if (party.size && party.maxSize) parts.push(`${party.size}/${party.maxSize}`);
+    if (party.rrPenalty > 0) parts.push(`${t("rankGap")} ${party.rrPenalty}%`);
+    if (party.ineligibilities?.length) parts.push(`${t("queueBlocked")}: ${party.ineligibilities.join(", ")}`);
     return parts.join(" · ");
 }
 
@@ -152,6 +154,7 @@ function card(puuid, p, selfPuuid) {
         top.append(crown);
     }
     if (p.isIdle) top.append(afkBadge());
+    if (p.isReady === false) top.append(el("span", "rounded bg-rose-600/80 px-1.5 text-xs font-bold text-white", t("notReady")));
     if (p.partyNumber > 0) {
         top.append(el("span", `rounded px-1.5 text-xs font-bold text-zinc-950 ${PARTY_COLORS[(p.partyNumber - 1) % PARTY_COLORS.length]}`, `P${p.partyNumber}`));
     }
@@ -164,6 +167,8 @@ function card(puuid, p, selfPuuid) {
     const stats = el("div", "mt-1 flex flex-wrap gap-x-3 text-xs text-zinc-400");
     stats.append(el("span", "", `${t("kd")} ${show(p.kd)}`), el("span", "", `${t("hs")} ${percent(p.headshotPercentage)}`),
         el("span", "", `${t("wr")} ${show(p.winPercentage)}`));
+    // Lobby: best server and ping from the party endpoint (src/account_info.party_details).
+    if (p.ping) stats.append(el("span", "text-emerald-400", `${p.ping.region} ${p.ping.ms} ms`));
     info.append(ranks, stats);
     root.append(info);
     root.addEventListener("click", () => openLoadout(p));
