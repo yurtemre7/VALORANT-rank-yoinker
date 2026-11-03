@@ -27,7 +27,7 @@ class PlayersPageTests(unittest.TestCase):
         self.assertEqual(len(set(parties)), 1)
 
         names = [p["name"] for p in players.values()]
-        self.assertIn("<img src=x onerror=alert(1)>", names)
+        self.assertIn("Çağrı#TR1", names)  # non-ASCII name renders as-is
         self.assertIn("#", names)  # streamer mode: src/names.py sends "#"
         self.assertTrue(any(p["weapons"] is None and p["sprays"] is None for p in players.values()))
 

@@ -159,9 +159,9 @@
     },
     "33333333-cccc-4ccc-8ccc-000000000003": {
       "puuid": "33333333-cccc-4ccc-8ccc-000000000003",
-      "name": "<img src=x onerror=alert(1)>",
-      "RiotName": "<img src=x onerror=alert(1)>",
-      "GameName": "<img src=x onerror=alert(1)>",
+      "name": "Çağrı#TR1",
+      "RiotName": "Çağrı#TR1",
+      "GameName": "Çağrı#TR1",
       "relation": "ally",
       "myTeam": "Blue",
       "partyNumber": 0,
