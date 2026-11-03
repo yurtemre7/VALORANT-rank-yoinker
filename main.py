@@ -38,8 +38,7 @@ from src.live_backbone import LiveBackbone
 from src.os_info import get_os
 from src.party_sort import sort_players_by_level_and_party
 from src.lobby_info import friends_activity, member_extras, party_status, private_by_puuid
-from src.account_info import index_metadata
-from src.account_service import METADATA_URLS, AccountService
+from src.own_loadout import METADATA_URLS, apply_own_loadout, fetch_own_loadout, index_metadata
 
 from src.account_manager.account_manager import AccountManager
 from src.account_manager.account_config import AccountConfig
@@ -158,18 +157,8 @@ try:
     colors = Colors(log, hide_names, agent_dict, AGENTCOLORLIST, tierDict)
 
     loadoutsClass = Loadouts(Requests, log, colors, Server, current_map)
-    # Players page lobby: your loadout, party details and account panel (own data only).
-    account_service = AccountService(
-        Requests,
-        lambda: index_metadata({
-            name: loadoutsClass._api_get(name, url).json().get("data", [])
-            for name, url in METADATA_URLS.items()
-        }),
-        map_urls,
-        log=log,
-    )
-    account_worker = ThreadPoolExecutor(max_workers=1, thread_name_prefix="vry-account")
-    last_lobby_account = {"loadout": None, "party": None, "account": {}}
+    # Players page lobby: your own equipped loadout (one call per lobby entry, in the background).
+    lobby_worker = ThreadPoolExecutor(max_workers=1, thread_name_prefix="vry-lobby")
     loadoutsClass.prime_metadata_async()
     table = Table(cfg, log)
 
@@ -1233,16 +1222,17 @@ try:
                 heartbeat_data["friends"] = friends_activity(
                     presence, Requests.puuid, {p["Subject"] for p in Players}, map_urls, gamemodes
                 )
-                # Own account/party calls run in the background; the table waits at most 1.5 s
-                # and otherwise shows the previous result (the service caches per endpoint).
-                try:
-                    last_lobby_account = account_worker.submit(account_service.lobby, Requests.puuid).result(timeout=1.5)
-                except Exception as exc:
-                    log(f"account panel not ready yet: {exc!r}")
-                lobby_party = last_lobby_account["party"] or {}
-                heartbeat_data["party"].update({k: v for k, v in lobby_party.items() if k != "members"})
-                if last_lobby_account["account"]:
-                    heartbeat_data["account"] = last_lobby_account["account"]
+                # Started now so it runs alongside the (slower) rank lookups below.
+                own_loadout_future = lobby_worker.submit(
+                    lambda: fetch_own_loadout(
+                        Requests,
+                        Requests.puuid,
+                        index_metadata({
+                            name: loadoutsClass._api_get(name, url).json().get("data", [])
+                            for name, url in METADATA_URLS.items()
+                        }),
+                    )
+                )
                 playersLoaded = 1
                 with richConsole.status("Loading Players...") as status:
                     # log(f"retrieved names dict: {names}")
@@ -1371,15 +1361,13 @@ try:
                                 "winPercentage": f"{playerRank['wr']} ({playerRank['numberofgames']})",
                                 "lastActive": format_last_active(ppstats.get("LastActiveEpoch")),
                                 **member_extras(lobby_presence.get(player["Subject"]), title_names),
-                                **((lobby_party.get("members") or {}).get(player["Subject"]) or {}),
                             }
-                            if player["Subject"] == Requests.puuid and last_lobby_account["loadout"]:
-                                own_weapons, own_sprays = last_lobby_account["loadout"]
-                                heartbeat_data["players"][player["Subject"]].update(
-                                    {"weapons": own_weapons, "sprays": own_sprays}
-                                )
 
                     seen.append(player["Subject"])
+                    try:
+                        apply_own_loadout(heartbeat_data["players"], Requests.puuid, own_loadout_future.result(timeout=3.0))
+                    except Exception as exc:
+                        log(f"own loadout not available for the lobby view: {exc!r}")
             if (title := game_state_dict.get(game_state)) is None:
                 time.sleep(9)
             

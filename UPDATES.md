@@ -105,6 +105,19 @@ Running log of local changes on branch `local-tweaks` vs fork `main`. Append eve
 - `src/server.py` `_QuietStaticHandler.end_headers`: sends `Cache-Control: no-cache`, so browsers revalidate (304 when unchanged). Without it a browser kept running the old `players.js` after the square-card-art update (seen live). Test: `test_docs_server_serves_players_page_and_logs_url`.
 - `AGENT.md`: the blanket "Do not add network calls" rule is replaced by a rule for legitimate Riot calls (documented endpoints via `Requests.fetch`, own/party data or what the client shows, nothing hidden, no automation, cached and on demand).
 
+### 2026-11-03 - players UI: own loadout in the lobby (scope reduced)
+Built first as a larger "account" feature, then cut back (companion, not a standalone app): the wallet / daily store / battle pass / recent-ranked panel and the party ping / ready display were removed again (still in git history: commits `0361121`, `c18e7e1`).
+
+| File | Change | Why |
+|---|---|---|
+| `src/own_loadout.py` (new) | `index_metadata`, `own_loadout` (parser), `fetch_own_loadout`, `apply_own_loadout` | Show your own equipped loadout in the lobby |
+| `main.py` MENUS branch | Starts `fetch_own_loadout` in a one-thread executor before the player loop, collects it after the loop (3 s limit), adds `weapons`/`sprays` to your own heartbeat entry. Metadata via `loadoutsClass._api_get` (already cached) | Overlaps the slow rank lookups; failure only logs |
+| `docs/players.lobby.sample.json`, `tests/test_own_loadout.py`, `tests/test_players_page.py` | Demo has your loadout; tests pin parser shape, the fetch contract (one GET, None on failure), and that the demo equals the real shape | Regression cover |
+| `docs/players.i18n.json` | `lobbyNote` now "Friends' loadouts appear once agent select starts." | Accurate wording |
+
+- **New Riot endpoint (the only one):** `GET pd /personalization/v3/players/{puuid}/playerloadout` via `Requests.fetch`, own account only, once per lobby entry, never polled. (v2 returns 404.)
+- **Known limit, whole lobby view:** the lobby branch of `main.py` runs once when you enter the lobby (the main loop blocks in `Ws.recconect_to_websocket` until the game state changes; the `cooldown` sleep is commented out). Party line, friends online, AFK/leader flags and your loadout are therefore a snapshot from that moment, not live. A periodic refresher would be needed to make them live.
+
 ## How to re-port onto a newer upstream/fork
 Each patch is independent. Find the symbol, re-apply, run the tests.
 

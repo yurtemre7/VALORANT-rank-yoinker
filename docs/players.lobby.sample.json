@@ -19,11 +19,6 @@
       "title": "Sharpshooter",
       "isOwner": true,
       "isIdle": false,
-      "isReady": true,
-      "ping": {
-        "region": "Frankfurt",
-        "ms": 14
-      },
       "weapons": {
         "9c82e19d-4575-0200-1a81-3eacf00cf872": {
           "weapon": "Vandal",
@@ -102,12 +97,7 @@
       "playerCard": "https://media.valorant-api.com/playercards/eef542d2-4724-bc47-f53f-239f8c9c2623/largeart.png",
       "title": "Healer",
       "isOwner": false,
-      "isIdle": false,
-      "isReady": false,
-      "ping": {
-        "region": "Paris",
-        "ms": 19
-      }
+      "isIdle": false
     },
     "66666666-ffff-4fff-8fff-000000000006": {
       "name": "Mara#EUW",
@@ -123,9 +113,7 @@
       "playerCard": "https://media.valorant-api.com/playercards/d32e58b1-4191-7315-ad4a-9da58b3f23dd/largeart.png",
       "title": null,
       "isOwner": false,
-      "isIdle": true,
-      "isReady": true,
-      "ping": null
+      "isIdle": true
     }
   },
   "party": {
@@ -134,14 +122,7 @@
     "queueEntry": 1793700000,
     "accessibility": "CLOSED",
     "size": 3,
-    "maxSize": 5,
-    "eligibleQueues": [
-      "unrated",
-      "competitive",
-      "swiftplay"
-    ],
-    "ineligibilities": [],
-    "rrPenalty": 10
+    "maxSize": 5
   },
   "friends": [
     {
@@ -190,103 +171,5 @@
       "playerCard": "https://media.valorant-api.com/playercards/eef542d2-4724-bc47-f53f-239f8c9c2623/largeart.png"
     }
   ],
-  "account": {
-    "wallet": [
-      {
-        "id": "85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741",
-        "name": "VALORANT POINTS",
-        "amount": 1250,
-        "icon": "https://media.valorant-api.com/currencies/85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741/displayicon.png"
-      },
-      {
-        "id": "e59aa87c-4cbf-517a-5983-6e81511be9b7",
-        "name": "RADIANITE Points",
-        "amount": 35,
-        "icon": "https://media.valorant-api.com/currencies/e59aa87c-4cbf-517a-5983-6e81511be9b7/displayicon.png"
-      },
-      {
-        "id": "85ca954a-41f2-ce94-9b45-8ca3dd39a00d",
-        "name": "Kingdom Credits",
-        "amount": 4200,
-        "icon": "https://media.valorant-api.com/currencies/85ca954a-41f2-ce94-9b45-8ca3dd39a00d/displayicon.png"
-      }
-    ],
-    "store": {
-      "offers": [
-        {
-          "skin": "4a1e0934-46ae-fa2a-a009-05ade5d43402",
-          "name": "VALORANT GO! Vol. 2 Operator",
-          "icon": "https://media.valorant-api.com/weaponskinlevels/68811d2b-4a6d-cbdc-39d3-f580aa97a297/displayicon.png",
-          "cost": 1775
-        },
-        {
-          "skin": "d722313d-43cb-b38d-7841-75880a3ed2cb",
-          "name": "Elderflame Operator",
-          "icon": "https://media.valorant-api.com/weaponskinlevels/5c273d0e-47fa-bb8c-d914-728de95da30e/displayicon.png",
-          "cost": 2475
-        },
-        {
-          "skin": "1e9b6856-4aaa-4dba-1da7-3791690113d8",
-          "name": "Valiant Hero Operator",
-          "icon": "https://media.valorant-api.com/weaponskinlevels/a7ec8cbf-499b-31cc-d58f-a2a900d7239c/displayicon.png",
-          "cost": 1775
-        },
-        {
-          "skin": "fb9ff2b0-4d71-d53c-364e-fe98fb5a2411",
-          "name": "Kuronami Marshal",
-          "icon": "https://media.valorant-api.com/weaponskinlevels/60edaaf5-41b2-1652-af0a-2dafed7bc71e/displayicon.png",
-          "cost": 2375
-        }
-      ],
-      "resetsAt": 1793718889
-    },
-    "battlepass": {
-      "name": "Season 2026 // Act VI",
-      "level": 33,
-      "maxLevel": 55
-    },
-    "rrHistory": [
-      {
-        "map": "Ascent",
-        "earned": 18,
-        "tierAfter": 21,
-        "rrAfter": 62,
-        "startTime": 1793700000000,
-        "placement": false
-      },
-      {
-        "map": "Bind",
-        "earned": -15,
-        "tierAfter": 21,
-        "rrAfter": 44,
-        "startTime": 1793696400000,
-        "placement": false
-      },
-      {
-        "map": "Split",
-        "earned": 22,
-        "tierAfter": 21,
-        "rrAfter": 59,
-        "startTime": 1793692800000,
-        "placement": false
-      },
-      {
-        "map": "Sunset",
-        "earned": 0,
-        "tierAfter": 12,
-        "rrAfter": 0,
-        "startTime": 1793689200000,
-        "placement": true
-      },
-      {
-        "map": "Abyss",
-        "earned": -11,
-        "tierAfter": 21,
-        "rrAfter": 37,
-        "startTime": 1793685600000,
-        "placement": false
-      }
-    ]
-  },
   "type": "heartbeat"
 }

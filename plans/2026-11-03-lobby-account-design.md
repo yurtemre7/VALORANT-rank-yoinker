@@ -46,3 +46,6 @@ Every fetch failure → that part omitted; table and page keep working. No retri
 
 ## Testing
 Unit tests for every parser and the service cache (fake `Requests`, fake clock). Demo fixture with all fields; Python test that fixture keys equal parser output keys. Headless browser check of the lobby demo (EN/TR). One live read-only check of the service against the running client.
+
+## Scope change (same day, after Task 4)
+The user asked to keep this a companion, not a standalone app, and not to build too many features. Shipped result: **own equipped loadout in the lobby only** (`src/own_loadout.py`, one endpoint). The Account panel (wallet, store, battle pass, RR history) and the party ping/ready display were removed; they remain in git history (`0361121`, `c18e7e1`). The final review also showed the lobby branch runs once per lobby entry (see `UPDATES.md`), which made live-looking ping/ready data misleading.

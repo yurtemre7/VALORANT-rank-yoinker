@@ -33,10 +33,6 @@ const subtitle = (p) => [agentOf(p), p.title].filter(Boolean).join(" · ");
 // Player cards come in three shapes on valorant-api: smallart (square), wideart (horizontal),
 // largeart (tall). The payload carries largeart; every image slot on this page is square.
 const squareCard = (url) => (url ? String(url).replace(/\/largeart\.png$/i, "/smallart.png") : url);
-const hms = (seconds) => {
-    const s = Math.max(0, Math.floor(seconds));
-    return `${Math.floor(s / 3600)}:${String(Math.floor((s % 3600) / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
-};
 const modeName = (mode) => (mode ? I18N[lang].modes[mode] ?? mode : null);
 const clock = (seconds) => {
     const s = Math.max(0, Math.floor(seconds));
@@ -101,79 +97,6 @@ function iconRow(heading, items) {
     return [el("h3", "mt-6 text-sm font-semibold uppercase tracking-widest text-zinc-400", heading), row];
 }
 
-const label = (text, cls = "text-xs font-semibold uppercase tracking-widest text-zinc-400") => el("h3", cls, text);
-
-// Lobby only: your own wallet, daily store, battle pass and last ranked games
-// (src/account_info.py via src/account_service.py). Any part may be missing.
-function accountPanel(account) {
-    const parts = [];
-    if (account.wallet?.length) {
-        const row = el("div", "flex flex-wrap gap-2");
-        for (const c of account.wallet) {
-            const chip = el("div", "flex items-center gap-2 rounded-lg bg-white/5 px-3 py-1.5");
-            const icon = img(c.icon, "h-5 w-5 object-contain");
-            if (icon) chip.append(icon);
-            chip.append(el("span", "font-semibold", String(c.amount)),
-                el("span", "text-xs text-zinc-400", I18N[lang].currencies[c.id] ?? c.name ?? ""));
-            row.append(chip);
-        }
-        parts.push(row);
-    }
-    if (account.store?.offers?.length) {
-        const box = el("div", "grid gap-2");
-        const head = el("div", "flex items-baseline gap-3");
-        const reset = el("span", "ml-auto text-xs text-zinc-400");
-        reset.id = "storeReset";
-        reset.dataset.resetsAt = account.store.resetsAt;
-        reset.textContent = storeResetText();
-        head.append(label(t("dailyStore")), reset);
-        const offers = el("div", "grid grid-cols-2 gap-2");
-        offers.id = "storeOffers";
-        for (const o of account.store.offers) {
-            const tile = el("div", "flex flex-col gap-1 rounded-lg bg-white/5 p-2");
-            tile.append(img(o.icon, "h-12 w-full object-contain") || el("div", "h-12"),
-                el("div", "truncate text-xs", localName(o.skin, o.name)),
-                el("div", "text-xs text-zinc-400", `${o.cost ?? "—"} VP`));
-            offers.append(tile);
-        }
-        box.append(head, offers);
-        parts.push(box);
-    }
-    if (account.battlepass) {
-        const bp = account.battlepass;
-        const box = el("div", "grid gap-1");
-        const head = el("div", "flex items-baseline justify-between text-sm");
-        head.append(label(t("battlePass")), el("span", "", `${t("level")} ${bp.level} / ${bp.maxLevel}`));
-        const track = el("div", "h-2 overflow-hidden rounded bg-white/10");
-        const bar = el("div", "h-full bg-amber-400");
-        bar.id = "bpBar";
-        bar.style.width = `${bp.maxLevel ? Math.min(100, (bp.level / bp.maxLevel) * 100) : 0}%`;
-        track.append(bar);
-        box.append(head, track, el("div", "truncate text-xs text-zinc-500", bp.name || ""));
-        parts.push(box);
-    }
-    if (account.rrHistory?.length) {
-        const box = el("div", "grid gap-2");
-        const row = el("div", "flex flex-wrap gap-2 text-sm font-semibold");
-        row.id = "rrHistory";
-        for (const m of account.rrHistory) {
-            const text = m.placement ? `${t("placement")} ${show(m.map)}`
-                : `${m.earned > 0 ? "+" : m.earned < 0 ? "−" : "±"}${Math.abs(m.earned ?? 0)} ${show(m.map)}`;
-            const chip = el("span", `rounded-lg bg-white/5 px-2 py-1 ${m.placement || !m.earned ? "text-zinc-300" : m.earned > 0 ? "text-emerald-400" : "text-rose-400"}`, text);
-            if (m.rrAfter != null && !m.placement) chip.title = `${I18N[lang].ranks[m.tierAfter] ?? "—"} · ${m.rrAfter} RR`;
-            row.append(chip);
-        }
-        box.append(label(t("recentRanked")), row);
-        parts.push(box);
-    }
-    return parts;
-}
-
-const storeResetText = () => {
-    const at = lastHeartbeat?.account?.store?.resetsAt;
-    return at ? `${t("resetsIn")} ${hms(at - Date.now() / 1000)}` : "";
-};
-
 function afkBadge() {
     return el("span", "rounded bg-zinc-600 px-1.5 text-xs font-bold text-zinc-100", t("afk"));
 }
@@ -190,8 +113,6 @@ function partyLine(hb) {
     }
     if (party.accessibility) parts.push(t(party.accessibility === "OPEN" ? "openParty" : "closedParty"));
     if (party.size && party.maxSize) parts.push(`${party.size}/${party.maxSize}`);
-    if (party.rrPenalty > 0) parts.push(`${t("rankGap")} ${party.rrPenalty}%`);
-    if (party.ineligibilities?.length) parts.push(`${t("queueBlocked")}: ${party.ineligibilities.join(", ")}`);
     return parts.join(" · ");
 }
 
@@ -231,7 +152,6 @@ function card(puuid, p, selfPuuid) {
         top.append(crown);
     }
     if (p.isIdle) top.append(afkBadge());
-    if (p.isReady === false) top.append(el("span", "rounded bg-rose-600/80 px-1.5 text-xs font-bold text-white", t("notReady")));
     if (p.partyNumber > 0) {
         top.append(el("span", `rounded px-1.5 text-xs font-bold text-zinc-950 ${PARTY_COLORS[(p.partyNumber - 1) % PARTY_COLORS.length]}`, `P${p.partyNumber}`));
     }
@@ -244,8 +164,6 @@ function card(puuid, p, selfPuuid) {
     const stats = el("div", "mt-1 flex flex-wrap gap-x-3 text-xs text-zinc-400");
     stats.append(el("span", "", `${t("kd")} ${show(p.kd)}`), el("span", "", `${t("hs")} ${percent(p.headshotPercentage)}`),
         el("span", "", `${t("wr")} ${show(p.winPercentage)}`));
-    // Lobby: best server and ping from the party endpoint (src/account_info.party_details).
-    if (p.ping) stats.append(el("span", "text-emerald-400", `${p.ping.region} ${p.ping.ms} ms`));
     info.append(ranks, stats);
     root.append(info);
     root.addEventListener("click", () => openLoadout(p));
@@ -311,10 +229,6 @@ function render(hb) {
     const friends = lobby ? hb.friends || [] : [];
     $("friends").replaceChildren(...friends.map(friendRow));
     $("friendsSection").hidden = !friends.length;
-    const panel = lobby && hb.account ? accountPanel(hb.account) : [];
-    $("account").replaceChildren(...panel);
-    $("accountSection").hidden = !panel.length;
-    $("lobbyAside").hidden = $("friendsSection").hidden && $("accountSection").hidden;
     if (!entries.length) $("allies").append(el("p", "text-zinc-400", t(lobby ? "waitingParty" : "waiting")));
     else if (lobby) $("allies").append(el("p", "text-xs text-zinc-500", t("lobbyNote")));
 }
@@ -375,11 +289,7 @@ async function init() {
         button.addEventListener("click", () => setLang(button.dataset.lang));
     }
     setLang(lang);
-    setInterval(() => {
-        if (!lastHeartbeat) return;
-        $("partyStatus").textContent = partyLine(lastHeartbeat);
-        if ($("storeReset")) $("storeReset").textContent = storeResetText();
-    }, 1000);
+    setInterval(() => { if (lastHeartbeat) $("partyStatus").textContent = partyLine(lastHeartbeat); }, 1000);
 
     const demo = new URLSearchParams(location.search).get("demo");
     if (demo === null) return connect();
@@ -388,7 +298,6 @@ async function init() {
         const response = await fetch(demo === "lobby" ? "players.lobby.sample.json" : "players.sample.json");
         const hb = await response.json();
         if (hb.party?.queueEntry) hb.party.queueEntry = Date.now() / 1000 - 83; // demo: a queue that started 1:23 ago
-        if (hb.account?.store?.resetsAt > 1e9 && demo === "lobby") hb.account.store.resetsAt = Math.floor(Date.now() / 1000) + 5 * 3600 + 12 * 60 + 3;
         render(hb);
     } catch {
         setStatus("demoFailed");
