@@ -36,16 +36,10 @@ The console shows two clickable links (use Windows Terminal so they are clickabl
 
 ### On your phone
 
-The console line `vRY Mobile - http://<pc-ip>:1101/players.html?port=1100` opens the dashboard on a phone in the same network. One-time Windows setup on the PC:
+Open the console link `vRY Mobile - http://<pc-ip>:1101/players.html?port=1100` on a phone in the same network.
 
-1. Settings → Network & internet → Ethernet (or Wi-Fi) → Network profile type: **Private**.
-2. Allow the Python that `uv run` uses through the firewall on private networks (admin PowerShell):
-
-   ```powershell
-   New-NetFirewallRule -DisplayName "vRY (uv Python 3.14)" -Direction Inbound -Action Allow -Profile Private -Protocol TCP -LocalPort 1100,1101 -Program "$env:APPDATA\uv\python\cpython-3.14-windows-x86_64-none\python.exe"
-   ```
-
-   The path must be the `cpython-3.14-windows-…` folder (what `uv run` starts), not `cpython-3.14.6-…`.
+- The phone's browser needs local network access: on Android allow **Nearby devices** for the browser (Settings → Apps → *browser* → Permissions); on iPhone turn on **Local Network** for it (Settings → Privacy & Security → Local Network). Without it the page fails (e.g. `ERR_TOO_MANY_RETRIES`) even on the same Wi-Fi.
+- Windows asks once whether Python may accept connections; allow it.
 
 ## 3. Try the dashboard without VALORANT
 
@@ -59,8 +53,8 @@ Open http://127.0.0.1:8000/players.html?demo (in match) or `?demo=lobby` (lobby)
 
 | Problem | Fix |
 |---|---|
-| Windows Firewall asks about Python | Allow on **private** networks only (needed for the phone; the PC pages work either way). |
-| Phone link does not load | PC network must be **Private** and the firewall rule from "On your phone" must exist. |
+| Windows Firewall asks about Python | Allow it (needed for the phone; the PC pages work either way). |
+| Phone link does not load | Allow **Nearby devices** (Android) / **Local Network** (iPhone) for the phone's browser; the phone must be on the same network as the PC. |
 | "vRY is being blocked by the firewall!!" | Port 1100 is in use. Close the other vRY / app, or change `"port"` in `config.json`. |
 | Garbled symbols or `UnicodeEncodeError` | Use Windows Terminal. When piping output: `$env:PYTHONUTF8=1` first. |
 | Stuck waiting / no players | VALORANT must be running and logged in. Restart vRY after restarting VALORANT. |
