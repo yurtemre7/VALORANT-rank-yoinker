@@ -403,6 +403,19 @@ try:
                 color(f"- {inventories_link}", fore=(255, 127, 80)),
             )
 
+            # Set by Server.start_docs_server only when the local docs server is running.
+            players_url = os.environ.get("VRY_PLAYERS_URL")
+            if players_url:
+                players_link = (
+                    f"\033]8;;{players_url}\033\\"
+                    "View in browser"
+                    f"\033]8;;\033\\"
+                )
+                print(
+                    "\nPlayers Dashboard",
+                    color(f"- {players_link}", fore=(255, 127, 80)),
+                )
+
     richConsole = RichConsole()
 
     firstTime = True

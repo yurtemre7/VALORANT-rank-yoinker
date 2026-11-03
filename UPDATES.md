@@ -53,6 +53,13 @@ Running log of local changes on branch `local-tweaks` vs fork `main`. Append eve
 - Not translated: agent names (same in Turkish), player titles (English from the payload), K/D and HS.
 - If a new mode is added to `gamemodes` in `src/constants.py`, add it to both `modes` maps; `test_i18n_covers_every_game_mode` fails until then.
 
+### 2026-11-03 - players dashboard link in console
+| File | Change | Why |
+|---|---|---|
+| `src/server.py` `Server.start_docs_server` | Sets `os.environ["VRY_PLAYERS_URL"]` to the players URL (same value as the log line) | Hand the URL to the console |
+| `main.py` `print_info` | After "Player Inventories", prints `Players Dashboard - View in browser` as an OSC-8 link to `VRY_PLAYERS_URL`, only when it is set (docs server running) | Show the new page at startup |
+| `tests/test_tracker_server.py` | Asserts `VRY_PLAYERS_URL` is set | Regression cover |
+
 ## How to re-port onto a newer upstream/fork
 Each patch is independent. Find the symbol, re-apply, run the tests.
 

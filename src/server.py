@@ -126,10 +126,12 @@ class Server:
         browser_url = self.get_match_loadouts_url(websocket_port)
         os.environ["VRY_TRACKER_URL"] = browser_url
         self.log(f"tracker UI serving {docs_dir} at {browser_url}")
-        self.log(
-            f"players UI at http://127.0.0.1:{self.docs_port}/players.html"
+        players_url = (
+            f"http://127.0.0.1:{self.docs_port}/players.html"
             f"?port={int(websocket_port)}"
         )
+        os.environ["VRY_PLAYERS_URL"] = players_url
+        self.log(f"players UI at {players_url}")
 
     def get_match_loadouts_url(self, websocket_port):
         if self.docs_port is not None:

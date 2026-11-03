@@ -56,7 +56,7 @@ class TrackerServerTests(unittest.TestCase):
             logs = []
             tracker = server_module.Server(logs.append, Error=None)
 
-            with patch.object(server_module, "PROJECT_ROOT", root):
+            with patch.object(server_module, "PROJECT_ROOT", root), patch.dict(server_module.os.environ):
                 tracker.start_docs_server(65535)
                 try:
                     url = f"http://127.0.0.1:{tracker.docs_port}/players.html"
@@ -64,6 +64,10 @@ class TrackerServerTests(unittest.TestCase):
                         self.assertEqual(response.read().decode("utf-8"), "players-ok")
                     self.assertTrue(
                         any("/players.html?port=65535" in line for line in logs), logs
+                    )
+                    self.assertEqual(
+                        server_module.os.environ.get("VRY_PLAYERS_URL"),
+                        f"http://127.0.0.1:{tracker.docs_port}/players.html?port=65535",
                     )
                 finally:
                     tracker.docs_server.shutdown()
