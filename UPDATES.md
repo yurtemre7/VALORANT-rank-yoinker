@@ -85,6 +85,19 @@ Running log of local changes on branch `local-tweaks` vs fork `main`. Append eve
 
 - Exposure: anyone on the same network can now open the pages (read-only match view); the websocket on 1100 was already LAN-reachable before.
 
+### 2026-11-03 - players UI: lobby details + friends online
+| File | Change | Why |
+|---|---|---|
+| `src/lobby_info.py` (new) | Pure helpers over the local presence rows vRY already loads (`/chat/v4/presences`): `private_by_puuid`, `party_status` (party state, queue entry time as epoch, open/closed, size), `member_extras` (card art URL, title, party leader, AFK), `friends_activity` (online VALORANT friends outside the party: state, mode, map, score, rank, level, party size, AFK, card) | Lobby view had only name/rank/stats |
+| `main.py` MENUS branch | Heartbeat gets `party`, `friends`, and per-member extras; titles from the cached valorant-api `playertitles` metadata (`loadoutsClass._api_get`) | No new Riot calls |
+| `main.py` INGAME branch | Heartbeat gets `mapSplash` (from `map_splashes`) | `map` holds the map *name*, so the page background never showed in real matches (demo data had a URL) |
+| `docs/players.html`, `docs/players.js` | Crown on the party leader, AFK badge, card art + title on lobby cards, party line "In queue 1:23 · Closed party · 3/5" (live timer), "Friends online" section (in-match friends first, with mode · map · score), background from `mapSplash` | Lobby feature A |
+| `docs/players.i18n.json` | Keys `friends`, `inQueue`, `matchFound`, `openParty`, `closedParty`, `partyLeader`, `afk`; mode `Custom Game` (main.py sends it for custom games) | EN/TR |
+| `docs/players.lobby.sample.json`, `docs/players.sample.json` | Lobby demo: queue, leader, AFK member, 3 friends; in-match demo uses the real `map` name + `mapSplash` | Demo the real shapes |
+| `tests/test_lobby_info.py` (new), `tests/test_players_page.py` | Helper tests; demo payload keys must equal what `src/lobby_info.py` produces | Regression cover |
+
+- Verified the helpers against a live presence (2026-11-03): queue, accessibility, size, leader and card art parse correctly.
+
 ## How to re-port onto a newer upstream/fork
 Each patch is independent. Find the symbol, re-apply, run the tests.
 

@@ -24,11 +24,16 @@
         <main class="grid gap-6 p-6 lg:grid-cols-2">
             <section id="alliesSection">
                 <h2 id="alliesTitle" class="mb-3 text-sm font-semibold uppercase tracking-widest text-sky-400">Allies</h2>
+                <p id="partyStatus" class="-mt-1 mb-3 text-sm text-zinc-300 empty:hidden"></p>
                 <div id="allies" class="grid gap-3"></div>
             </section>
             <section id="enemiesSection">
                 <h2 class="mb-3 text-sm font-semibold uppercase tracking-widest text-rose-400" data-i18n="enemies">Enemies</h2>
                 <div id="enemies" class="grid gap-3"></div>
+            </section>
+            <section id="friendsSection" hidden>
+                <h2 class="mb-3 text-sm font-semibold uppercase tracking-widest text-emerald-400" data-i18n="friends">Friends online</h2>
+                <div id="friends" class="grid gap-2"></div>
             </section>
         </main>
     </div>

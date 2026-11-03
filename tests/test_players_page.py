@@ -62,6 +62,32 @@ class PlayersPageTests(unittest.TestCase):
             for key in ("relation", "weapons", "agent"):
                 self.assertNotIn(key, p)
 
+    def test_lobby_extras_match_python_output(self):
+        # Same keys as src/lobby_info.py produces for the MENUS heartbeat.
+        from src.lobby_info import friends_activity, member_extras, party_status
+        from tests.test_lobby_info import FRIEND, ME, private, row
+
+        hb = load("players.lobby.sample.json")
+        self.assertEqual(set(hb["party"]), set(party_status(private())))
+        self.assertEqual(hb["party"]["state"], "MATCHMAKING")
+        extras = set(member_extras(private(), {}))
+        for p in hb["players"].values():
+            self.assertLessEqual(extras, set(p))
+        self.assertEqual(sum(p["isOwner"] for p in hb["players"].values()), 1)
+        self.assertTrue(any(p["isIdle"] for p in hb["players"].values()))
+
+        friend_keys = set(friends_activity([row(FRIEND, private())], ME, {ME}, {}, {})[0])
+        self.assertTrue(hb["friends"])
+        for friend in hb["friends"]:
+            self.assertEqual(set(friend), friend_keys)
+        self.assertEqual({f["state"] for f in hb["friends"]}, {"INGAME", "PREGAME", "MENUS"})
+
+    def test_ingame_map_is_name_with_splash(self):
+        # main.py sends the map name in "map" and the image in "mapSplash".
+        hb = load("players.sample.json")
+        self.assertEqual(hb["map"], ["Ascent"])
+        self.assertTrue(hb["mapSplash"].startswith("https://media.valorant-api.com/maps/"))
+
     def test_page_wiring(self):
         html = (DOCS / "players.html").read_text(encoding="utf-8")
         self.assertIn("vendor/tailwind.js", html)
@@ -86,7 +112,8 @@ class PlayersPageTests(unittest.TestCase):
         self.assertEqual(en["ranks"][26], "Immortal 3")
         self.assertEqual(tr["ranks"][27], "Radyant")
         self.assertEqual(sorted(en["states"]), ["INGAME", "MENUS", "PREGAME"])
-        for key in ("hiddenPlayer", "emotes", "waitingParty", "demoFailed"):
+        for key in ("hiddenPlayer", "emotes", "waitingParty", "demoFailed", "friends", "inQueue", "matchFound",
+                    "openParty", "closedParty", "partyLeader", "afk"):
             self.assertIn(key, en["ui"])
 
     def test_i18n_covers_every_game_mode(self):

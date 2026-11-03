@@ -4,7 +4,7 @@
   "mode": "Competitive",
   "puuid": "11111111-aaaa-4aaa-8aaa-000000000001",
   "map": [
-    "https://media.valorant-api.com/maps/7eaecc1b-4337-bbf6-6ab9-04b8f06b3319/splash.png"
+    "Ascent"
   ],
   "myTeam": "Blue",
   "players": {
@@ -333,5 +333,6 @@
       "weapons": null
     }
   },
+  "mapSplash": "https://media.valorant-api.com/maps/7eaecc1b-4337-bbf6-6ab9-04b8f06b3319/splash.png",
   "type": "heartbeat"
 }

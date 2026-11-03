@@ -14,7 +14,11 @@
       "kd": 1.24,
       "headshotPercentage": 27,
       "winPercentage": "61 (88)",
-      "lastActive": "now"
+      "lastActive": "now",
+      "playerCard": "https://media.valorant-api.com/playercards/c8b2f5fd-4331-b172-f3b7-c8a26f356a1f/largeart.png",
+      "title": "Sharpshooter",
+      "isOwner": true,
+      "isIdle": false
     },
     "22222222-bbbb-4bbb-8bbb-000000000002": {
       "name": "Kenji#0001",
@@ -26,7 +30,11 @@
       "kd": 0.98,
       "headshotPercentage": 19,
       "winPercentage": "52 (41)",
-      "lastActive": "now"
+      "lastActive": "now",
+      "playerCard": "https://media.valorant-api.com/playercards/eef542d2-4724-bc47-f53f-239f8c9c2623/largeart.png",
+      "title": "Healer",
+      "isOwner": false,
+      "isIdle": false
     },
     "66666666-ffff-4fff-8fff-000000000006": {
       "name": "Mara#EUW",
@@ -38,8 +46,67 @@
       "kd": 1.02,
       "headshotPercentage": 22,
       "winPercentage": "49 (35)",
-      "lastActive": "now"
+      "lastActive": "now",
+      "playerCard": "https://media.valorant-api.com/playercards/d32e58b1-4191-7315-ad4a-9da58b3f23dd/largeart.png",
+      "title": null,
+      "isOwner": false,
+      "isIdle": true
     }
   },
+  "party": {
+    "state": "MATCHMAKING",
+    "queueId": "competitive",
+    "queueEntry": 1793700000,
+    "accessibility": "CLOSED",
+    "size": 3,
+    "maxSize": 5
+  },
+  "friends": [
+    {
+      "puuid": "88888888-aaaa-4aaa-8aaa-000000000008",
+      "name": "Deniz#TR1",
+      "state": "INGAME",
+      "mode": "Competitive",
+      "map": "Ascent",
+      "scoreAlly": 9,
+      "scoreEnemy": 7,
+      "rank": 18,
+      "level": 230,
+      "partySize": 2,
+      "maxPartySize": 5,
+      "isIdle": false,
+      "playerCard": "https://media.valorant-api.com/playercards/d2d3caf9-499f-2ac8-9722-54961c3bcbf5/largeart.png"
+    },
+    {
+      "puuid": "99999999-bbbb-4bbb-8bbb-000000000009",
+      "name": "Ali#TR1",
+      "state": "PREGAME",
+      "mode": "Swiftplay",
+      "map": null,
+      "scoreAlly": null,
+      "scoreEnemy": null,
+      "rank": 12,
+      "level": 98,
+      "partySize": 1,
+      "maxPartySize": 5,
+      "isIdle": false,
+      "playerCard": "https://media.valorant-api.com/playercards/e8787c31-4a39-9636-94a5-77b298d26ba7/largeart.png"
+    },
+    {
+      "puuid": "aaaaaaaa-cccc-4ccc-8ccc-00000000000a",
+      "name": "Mert#EUW",
+      "state": "MENUS",
+      "mode": "Unrated",
+      "map": null,
+      "scoreAlly": null,
+      "scoreEnemy": null,
+      "rank": 0,
+      "level": 41,
+      "partySize": 1,
+      "maxPartySize": 5,
+      "isIdle": true,
+      "playerCard": "https://media.valorant-api.com/playercards/eef542d2-4724-bc47-f53f-239f8c9c2623/largeart.png"
+    }
+  ],
   "type": "heartbeat"
 }

@@ -23,7 +23,14 @@
       "hiddenPlayer": "Hidden player",
       "emotes": "Emotes",
       "waitingParty": "Waiting for party data…",
-      "demoFailed": "Demo data could not be loaded"
+      "demoFailed": "Demo data could not be loaded",
+      "friends": "Friends online",
+      "inQueue": "In queue",
+      "matchFound": "Match found",
+      "openParty": "Open party",
+      "closedParty": "Closed party",
+      "partyLeader": "Party leader",
+      "afk": "AFK"
     },
     "states": {
       "MENUS": "Lobby",
@@ -41,6 +48,7 @@
       "Replication": "Replication",
       "Team Deathmatch": "Team Deathmatch",
       "Custom": "Custom",
+      "Custom Game": "Custom Game",
       "Snowball Fight": "Snowball Fight",
       "All Random One Site": "All Random One Site",
       "Knockout": "Knockout"
@@ -78,7 +86,14 @@
       "hiddenPlayer": "Gizli oyuncu",
       "emotes": "İfadeler",
       "waitingParty": "Grup verisi bekleniyor…",
-      "demoFailed": "Demo verisi yüklenemedi"
+      "demoFailed": "Demo verisi yüklenemedi",
+      "friends": "Çevrimiçi arkadaşlar",
+      "inQueue": "Sırada",
+      "matchFound": "Maç bulundu",
+      "openParty": "Açık grup",
+      "closedParty": "Kapalı grup",
+      "partyLeader": "Grup lideri",
+      "afk": "AFK"
     },
     "states": {
       "MENUS": "Lobi",
@@ -96,6 +111,7 @@
       "Replication": "Kopya",
       "Team Deathmatch": "Takımlı Ölüm Kalım Savaşı",
       "Custom": "Özel Oyun",
+      "Custom Game": "Özel Oyun",
       "Snowball Fight": "Kartopu Çatışması",
       "All Random One Site": "AR1S (Tek Bölgede Hepsi Rasgele)",
       "Knockout": "Nakavt"

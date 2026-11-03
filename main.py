@@ -37,6 +37,7 @@ from src.websocket import Ws
 from src.live_backbone import LiveBackbone
 from src.os_info import get_os
 from src.party_sort import sort_players_by_level_and_party
+from src.lobby_info import friends_activity, member_extras, party_status, private_by_puuid
 
 from src.account_manager.account_manager import AccountManager
 from src.account_manager.account_config import AccountConfig
@@ -661,6 +662,7 @@ try:
                 playersLoaded = 1
 
                 heartbeat_data["map"] = (map_urls[coregame_stats["MapID"].lower()],)
+                heartbeat_data["mapSplash"] = map_splashes.get(heartbeat_data["map"][0])
                 with richConsole.status("Loading Players...") as status:
                     partyOBJ = menu.get_party_json(
                         namesClass.get_players_puuid(Players), presence
@@ -1205,6 +1207,18 @@ try:
                 already_played_with = []
                 Players = menu.get_party_members(Requests.puuid, presence)
                 names = namesClass.get_names_from_puuids(Players)
+                # Players page lobby extras; no extra Riot calls (presence is already loaded,
+                # titles come from the cached valorant-api metadata).
+                lobby_presence = private_by_puuid(presence)
+                title_names = {
+                    str(t.get("uuid", "")).lower(): t.get("titleText")
+                    for t in loadoutsClass._api_get("titles", "https://valorant-api.com/v1/playertitles").json().get("data", [])
+                    if isinstance(t, dict)
+                }
+                heartbeat_data["party"] = party_status(lobby_presence.get(Requests.puuid))
+                heartbeat_data["friends"] = friends_activity(
+                    presence, Requests.puuid, {p["Subject"] for p in Players}, map_urls, gamemodes
+                )
                 playersLoaded = 1
                 with richConsole.status("Loading Players...") as status:
                     # log(f"retrieved names dict: {names}")
@@ -1332,6 +1346,7 @@ try:
                                 "headshotPercentage": ppstats["hs"],
                                 "winPercentage": f"{playerRank['wr']} ({playerRank['numberofgames']})",
                                 "lastActive": format_last_active(ppstats.get("LastActiveEpoch")),
+                                **member_extras(lobby_presence.get(player["Subject"]), title_names),
                             }
 
                     seen.append(player["Subject"])

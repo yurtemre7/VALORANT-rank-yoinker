@@ -30,6 +30,12 @@ const percent = (v) => (missing(v) ? "—" : `${v}%`);
 // main.py sends "Unknown" until the player locks an agent.
 const agentOf = (p) => (p.agent && p.agent !== "Unknown" ? p.agent : null);
 const subtitle = (p) => [agentOf(p), p.title].filter(Boolean).join(" · ");
+const modeName = (mode) => (mode ? I18N[lang].modes[mode] ?? mode : null);
+const clock = (seconds) => {
+    const s = Math.max(0, Math.floor(seconds));
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = String(s % 60).padStart(2, "0");
+    return h ? `${h}:${String(m).padStart(2, "0")}:${sec}` : `${m}:${sec}`;
+};
 const t = (key) => I18N[lang].ui[key];
 
 function localName(uuid, fallback) {
@@ -88,6 +94,44 @@ function iconRow(heading, items) {
     return [el("h3", "mt-6 text-sm font-semibold uppercase tracking-widest text-zinc-400", heading), row];
 }
 
+function afkBadge() {
+    return el("span", "rounded bg-zinc-600 px-1.5 text-xs font-bold text-zinc-100", t("afk"));
+}
+
+// Lobby only (src/lobby_info.party_status): queue timer, open/closed party, size.
+function partyLine(hb) {
+    const party = hb?.state === "MENUS" ? hb.party : null;
+    if (!party?.state) return "";
+    const parts = [];
+    if (party.state === "MATCHMAKING") {
+        parts.push(party.queueEntry ? `${t("inQueue")} ${clock(Date.now() / 1000 - party.queueEntry)}` : t("inQueue"));
+    } else if (party.state === "MATCHMADE_GAME_STARTING") {
+        parts.push(t("matchFound"));
+    }
+    if (party.accessibility) parts.push(t(party.accessibility === "OPEN" ? "openParty" : "closedParty"));
+    if (party.size && party.maxSize) parts.push(`${party.size}/${party.maxSize}`);
+    return parts.join(" · ");
+}
+
+// One online friend outside the party (src/lobby_info.friends_activity).
+function friendRow(f) {
+    const row = el("div", "flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-2");
+    row.append(img(f.playerCard, "h-10 w-10 shrink-0 rounded object-cover") || el("div", "h-10 w-10 shrink-0 rounded bg-white/10"));
+    const info = el("div", "min-w-0 flex-1");
+    const top = el("div", "flex items-center gap-2");
+    top.append(el("span", "truncate font-semibold", displayName(f)));
+    if (f.isIdle) top.append(afkBadge());
+    top.append(el("span", "ml-auto text-xs text-zinc-400", `${t("lv")} ${show(f.level)}`));
+    const score = f.scoreAlly != null && f.scoreEnemy != null ? `${f.scoreAlly}–${f.scoreEnemy}` : null;
+    const activity = [I18N[lang].states[f.state] ?? show(f.state), modeName(f.mode), f.map, score].filter(Boolean).join(" · ");
+    const line = el("div", "flex flex-wrap gap-x-3 text-xs");
+    line.append(el("span", "text-zinc-300", activity), rank(f.rank, ""));
+    if (f.partySize > 1) line.append(el("span", "text-zinc-400", `${f.partySize}/${f.maxPartySize}`));
+    info.append(top, line);
+    row.append(info);
+    return row;
+}
+
 function card(puuid, p, selfPuuid) {
     const self = puuid === selfPuuid;
     const root = el("button", "flex w-full items-center gap-4 rounded-xl border bg-white/5 p-3 text-left transition hover:bg-white/10 "
@@ -99,6 +143,12 @@ function card(puuid, p, selfPuuid) {
     const info = el("div", "min-w-0 flex-1");
     const top = el("div", "flex items-center gap-2");
     top.append(el("span", "truncate font-semibold" + (self ? " text-amber-300" : ""), displayName(p)));
+    if (p.isOwner) {
+        const crown = el("span", "text-sm", "👑");
+        crown.title = t("partyLeader");
+        top.append(crown);
+    }
+    if (p.isIdle) top.append(afkBadge());
     if (p.partyNumber > 0) {
         top.append(el("span", `rounded px-1.5 text-xs font-bold text-zinc-950 ${PARTY_COLORS[(p.partyNumber - 1) % PARTY_COLORS.length]}`, `P${p.partyNumber}`));
     }
@@ -158,9 +208,11 @@ function openLoadout(p) {
 
 function render(hb) {
     lastHeartbeat = hb;
-    $("mode").textContent = I18N[lang].modes[hb.mode] ?? show(hb.mode);
+    $("mode").textContent = modeName(hb.mode) ?? "—";
     $("state").textContent = I18N[lang].states[hb.state] ?? show(hb.state);
-    document.body.style.backgroundImage = hb.map?.[0] ? `url(${JSON.stringify(hb.map[0])})` : "";
+    // main.py sends the map name in "map" and its image in "mapSplash".
+    const splash = hb.mapSplash || (/^https?:/.test(hb.map?.[0] || "") ? hb.map[0] : "");
+    document.body.style.backgroundImage = splash ? `url(${JSON.stringify(splash)})` : "";
 
     const entries = Object.entries(hb.players || {});
     const lobby = hb.state === "MENUS";
@@ -170,6 +222,10 @@ function render(hb) {
     $("allies").replaceChildren(...allies.map(([id, p]) => card(id, p, hb.puuid)));
     $("enemies").replaceChildren(...enemies.map(([id, p]) => card(id, p, hb.puuid)));
     $("enemiesSection").hidden = !enemies.length;
+    $("partyStatus").textContent = partyLine(hb);
+    const friends = lobby ? hb.friends || [] : [];
+    $("friends").replaceChildren(...friends.map(friendRow));
+    $("friendsSection").hidden = !friends.length;
     if (!entries.length) $("allies").append(el("p", "text-zinc-400", t(lobby ? "waitingParty" : "waiting")));
     else if (lobby) $("allies").append(el("p", "text-xs text-zinc-500", t("lobbyNote")));
 }
@@ -230,13 +286,16 @@ async function init() {
         button.addEventListener("click", () => setLang(button.dataset.lang));
     }
     setLang(lang);
+    setInterval(() => { if (lastHeartbeat) $("partyStatus").textContent = partyLine(lastHeartbeat); }, 1000);
 
     const demo = new URLSearchParams(location.search).get("demo");
     if (demo === null) return connect();
     setStatus("demo");
     try {
         const response = await fetch(demo === "lobby" ? "players.lobby.sample.json" : "players.sample.json");
-        render(await response.json());
+        const hb = await response.json();
+        if (hb.party?.queueEntry) hb.party.queueEntry = Date.now() / 1000 - 83; // demo: a queue that started 1:23 ago
+        render(hb);
     } catch {
         setStatus("demoFailed");
     }
