@@ -61,6 +61,9 @@ Running log of local changes on branch `local-tweaks` vs fork `main`. Append eve
 | `tests/test_tracker_server.py` | Asserts `VRY_PLAYERS_URL` is set | Regression cover |
 - Demo fixture: the HTML-injection test name was replaced with `Çağrı#TR1`; injection safety is enforced by `test_page_wiring` (no `innerHTML` templates, strings via `textContent`).
 
+### 2026-11-03 - HOW-TO-RUN.md
+- `HOW-TO-RUN.md` (new): minimal setup/run/demo/troubleshooting/update steps for running from source with uv. Docs only.
+
 ## How to re-port onto a newer upstream/fork
 Each patch is independent. Find the symbol, re-apply, run the tests.
 
