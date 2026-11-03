@@ -98,6 +98,9 @@ Running log of local changes on branch `local-tweaks` vs fork `main`. Append eve
 
 - Verified the helpers against a live presence (2026-11-03): queue, accessibility, size, leader and card art parse correctly.
 
+### 2026-11-03 - players UI: square card icons
+- `docs/players.js` `squareCard(url)`: valorant-api has three card shapes (`smallart` 128x128, `wideart` 452x128, `largeart` 268x640). The payload carries `largeart` (kept, `matchLoadouts` uses it); every image slot on the players page is square, so party/player cards, friend rows and the loadout header now load `smallart`. Test: `test_square_card_art`.
+
 ## How to re-port onto a newer upstream/fork
 Each patch is independent. Find the symbol, re-apply, run the tests.
 

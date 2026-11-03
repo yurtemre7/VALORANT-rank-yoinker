@@ -30,6 +30,9 @@ const percent = (v) => (missing(v) ? "—" : `${v}%`);
 // main.py sends "Unknown" until the player locks an agent.
 const agentOf = (p) => (p.agent && p.agent !== "Unknown" ? p.agent : null);
 const subtitle = (p) => [agentOf(p), p.title].filter(Boolean).join(" · ");
+// Player cards come in three shapes on valorant-api: smallart (square), wideart (horizontal),
+// largeart (tall). The payload carries largeart; every image slot on this page is square.
+const squareCard = (url) => (url ? String(url).replace(/\/largeart\.png$/i, "/smallart.png") : url);
 const modeName = (mode) => (mode ? I18N[lang].modes[mode] ?? mode : null);
 const clock = (seconds) => {
     const s = Math.max(0, Math.floor(seconds));
@@ -116,7 +119,7 @@ function partyLine(hb) {
 // One online friend outside the party (src/lobby_info.friends_activity).
 function friendRow(f) {
     const row = el("div", "flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-2");
-    row.append(img(f.playerCard, "h-10 w-10 shrink-0 rounded object-cover") || el("div", "h-10 w-10 shrink-0 rounded bg-white/10"));
+    row.append(img(squareCard(f.playerCard), "h-10 w-10 shrink-0 rounded object-cover") || el("div", "h-10 w-10 shrink-0 rounded bg-white/10"));
     const info = el("div", "min-w-0 flex-1");
     const top = el("div", "flex items-center gap-2");
     top.append(el("span", "truncate font-semibold", displayName(f)));
@@ -137,7 +140,7 @@ function card(puuid, p, selfPuuid) {
     const root = el("button", "flex w-full items-center gap-4 rounded-xl border bg-white/5 p-3 text-left transition hover:bg-white/10 "
         + (self ? "border-amber-400/70" : "border-white/10"));
     root.type = "button";
-    root.append(img(p.playerCard || p.agentImgLink, "h-20 w-20 shrink-0 rounded-lg object-cover")
+    root.append(img(squareCard(p.playerCard) || p.agentImgLink, "h-20 w-20 shrink-0 rounded-lg object-cover")
         || el("div", "flex h-20 w-20 shrink-0 items-center justify-center rounded-lg bg-white/10 text-2xl font-bold", displayName(p).slice(0, 1)));
 
     const info = el("div", "min-w-0 flex-1");
@@ -173,7 +176,7 @@ function openLoadout(p) {
     const body = $("loadoutBody");
     head.replaceChildren();
     body.replaceChildren();
-    const art = img(p.playerCard || p.agentImgLink, "h-24 w-24 rounded-lg object-cover");
+    const art = img(squareCard(p.playerCard) || p.agentImgLink, "h-24 w-24 rounded-lg object-cover");
     if (art) head.append(art);
     const who = el("div");
     who.append(el("div", "text-xl font-bold", displayName(p)), el("div", "text-sm text-zinc-400", subtitle(p)));

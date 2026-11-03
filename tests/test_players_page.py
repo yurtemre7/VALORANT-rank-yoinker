@@ -138,6 +138,12 @@ class PlayersPageTests(unittest.TestCase):
         self.assertTrue(weapons)
         self.assertTrue(all(re.fullmatch(r"[0-9a-f-]{36}", w.get("skin", "")) for w in weapons))
 
+    def test_square_card_art(self):
+        # Every card slot on the page is square: use valorant-api's smallart, not the tall largeart from the payload.
+        js = (DOCS / "players.js").read_text(encoding="utf-8")
+        self.assertIn("/smallart.png", js)
+        self.assertEqual(len(re.findall(r"img\((?:p|f)\.playerCard", js)), 0)
+
     def test_bundled_turkish_names(self):
         # Local copy of Riot's tr-TR names; the page only goes online for uuids missing here.
         names = load("players.tr-names.json")
